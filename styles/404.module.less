@@ -1,0 +1,74 @@
+@import "~antd/lib/style/color/colors.less";
+
+.page-404 {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  padding: 0px 48px 48px 48px;
+  min-height: calc(100vh - 143px);
+
+  @media only screen and (max-width: 767px) {
+    padding: 15px;
+  }
+
+  img.banner_img {
+    @media only screen and (max-width: 767px) {
+      width: 100%;
+    }
+  }
+
+  .logo {
+    margin-bottom: 53px;
+  }
+
+  h1 {
+    font-weight: bold;
+    font-size: 48px;
+    line-height: 56px;
+    color: #1f2937;
+    margin: 46px 0px 8px;
+  }
+
+  p {
+    margin-bottom: 44px;
+    font-size: 16px;
+    color: #6b7280;
+    text-align: center;
+  }
+
+  button {
+    width: 178px;
+    height: 48px;
+    background: #417837;
+    border-radius: 6px;
+  }
+}
+
+.logo-grid {
+  padding: 48px;
+  text-align: center;
+}
+
+.link-expire {
+  h3 {
+    font-weight: bold;
+    font-size: 24px;
+    line-height: 30px;
+    color: #1f2937;
+  }
+
+  .link-expire-img {
+    margin-bottom: 45px;
+  }
+}
+
+.loading-state {
+  display: flex;
+  justify-content: center;
+
+  img {
+    width: 30%;
+    height: 30%;
+  }
+}

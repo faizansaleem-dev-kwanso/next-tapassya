@@ -1,0 +1,193 @@
+@import "~antd/lib/style/color/colors.less";
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@100;300;500;700;900&display=swap&css");
+@import './antd.less';
+
+body {
+  font-family: "Inter", sans-serif;
+}
+
+:global(.site-layout) :global(.site-layout-background) {
+  background: @white;
+  position: relative;
+}
+
+header:global(.ant-layout-header) {
+  padding: 0;
+  width: 100%;
+  position: fixed;
+  background: @white;
+  z-index: 1;
+  display: flex;
+  justify-content: space-between;
+}
+
+:global(.ant-layout-sider),
+:global(.site-layout) {
+  padding-top: 64px;
+}
+
+:global(.ant-menu) > :global(.ant-menu-item:first-child) {
+  margin-top: 0;
+}
+
+:global(.ant-layout-content) :global(.ant-page-header-heading-sub-title) {
+  color: rgba(0, 0, 0);
+}
+
+:global(.ant-divider-horizontal.ant-divider-with-text) {
+  &::before,
+  &::after {
+    color: rgba(0, 0, 0, 0.15);
+  }
+}
+
+:global(.success-text) {
+  color: @info-color;
+}
+
+:global(.warning-text) {
+  color: @warning-color;
+}
+
+:global(.error-text) {
+  color: @error-color;
+}
+
+:global(.ant-menu-item.ant-menu-item-selected .ant-btn) {
+  color: @green-10;
+  font-weight: 600;
+}
+
+:global(.ant-btn-primary) {
+  &:global(.red) {
+    background-color: @red-5;
+    border-color: @red-5;
+
+    &:focus,
+    &:hover {
+      background-color: @red-4;
+      border-color: @red-4;
+    }
+  }
+}
+
+:global(.anticon) {
+  &:global(.green-icon) {
+    color: @green-bright;
+  }
+}
+
+:global(.ant-form-item-control-input-content) {
+  > input:read-only {
+    background-color: @green-1;
+  }
+}
+
+.ant-notification {
+  top: 64px !important;
+  margin: 0px !important;
+}
+
+.ant-notification-notice {
+  color: #991b1b;
+  margin: 0px !important;
+  font-weight: 500;
+  font-size: 16px;
+}
+
+.ant-notification-notice-onboarding-success {
+  background: #ecfdf5 !important;
+  color: #065f46;
+  width: 500px !important;
+
+  @media only screen and (max-width: 1024px) {
+    width: 100vw !important;
+    min-width: 100vw !important;
+  }
+
+  .anticon.ant-notification-notice-icon-info {
+    color: #34d399;
+  }
+
+  .ant-notification-notice-close {
+    color: #10b981;
+  }
+}
+
+.ant-notification-notice-success {
+  background: #ecfdf5 !important;
+  color: #065f46;
+  width: calc(100vw - 256px) !important;
+
+  @media only screen and (max-width: 1024px) {
+    width: 100vw !important;
+    min-width: 100vw !important;
+  }
+
+  .anticon.ant-notification-notice-icon-info {
+    color: #34d399;
+  }
+
+  .ant-notification-notice-close {
+    color: #10b981;
+  }
+}
+
+.ant-notification-notice-onboarding-error {
+  background: #fef2f2 !important;
+  color: #991b1b;
+  width: calc(100vw - 256px) !important;
+
+  @media only screen and (max-width: 1024px) {
+    width: 100vw !important;
+    min-width: 100vw !important;
+  }
+
+  .anticon.ant-notification-notice-icon-info {
+    color: #f87171;
+  }
+
+  .ant-notification-notice-close {
+    color: #ef4444;
+  }
+}
+
+.ant-notification-notice-error {
+  background: #fef2f2 !important;
+  color: #991b1b;
+  width: calc(100vw - 256px) !important;
+
+  @media only screen and (max-width: 1024px) {
+    width: 100vw !important;
+    min-width: 100vw !important;
+  }
+
+  .anticon.ant-notification-notice-icon-info {
+    color: #f87171;
+  }
+
+  .ant-notification-notice-close {
+    color: #ef4444;
+  }
+}
+
+.loader-wrapper {
+  padding: 12rem 2rem;
+
+  @media only screen and (max-width: 1024px) {
+    padding: 1rem;
+  }
+}
+
+.mobile-logo {
+  display: flex;
+  align-items: center;
+
+  & img {
+    width: 125px;
+
+    @media only screen and (min-width: 768px) {
+      display: none;
+    }
+  }
+}

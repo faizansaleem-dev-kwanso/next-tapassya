@@ -1,0 +1,64 @@
+@import "~antd/lib/style/color/colors.less";
+
+.delete-services-modal {
+  .ant-modal-content {
+    border-radius: 8px;
+  }
+
+  .ant-modal-footer {
+    border: 0px;
+  }
+
+  // .ant-modal-close-x{
+  //     display: none;
+  // }
+
+  .ant-modal-body {
+    padding-bottom: 16px;
+  }
+
+  .ant-modal-footer {
+    padding: 0px 24px 24px;
+  }
+
+  .modal-content-inner {
+    display: flex;
+
+    & button {
+      min-width: 40px;
+      height: 40px;
+      background: #fee2e2;
+      border-radius: 24px;
+      border: 0px;
+      padding: 0px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-right: 16px;
+    }
+
+    h5 {
+      margin-bottom: 8px;
+      padding-right: 20px;
+    }
+
+    p {
+      font-weight: normal;
+      font-size: 14px;
+      color: #6b7280;
+      margin: 0px 0px 15px;
+    }
+  }
+
+  .ant-modal-footer button + button {
+    margin-left: 12px;
+  }
+
+  .ant-btn.btn-outlined {
+    &:hover {
+      background: #ef4444;
+      border: 1px solid #ef4444;
+      color: #ffffff;
+    }
+  }
+}

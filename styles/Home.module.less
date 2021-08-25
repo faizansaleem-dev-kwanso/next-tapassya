@@ -1,0 +1,88 @@
+@import "~antd/lib/style/color/colors.less";
+
+.ant-layout-content {
+  background-color: #f9fafb;
+}
+
+.layout-banner {
+  padding: 128px 109px 0px;
+
+  @media only screen and (max-width: 767px) {
+    padding: 50px 20px 20px;
+  }
+
+  @media only screen and (min-width: 768px) and (max-width: 1024px) {
+    padding-top: 50px;
+  }
+}
+
+.homepage-content {
+  background-image: url("/background.svg");
+  background-position: 377px 40px;
+  background-repeat: no-repeat;
+  min-height: calc(100vh - 261px);
+  background-position: right;
+
+  @media only screen and (min-width: 1025px) and (max-width: 1366px) {
+    background-position: 165px 40px;
+    background-size: 100% 75%;
+  }
+
+  @media screen and (min-device-width: 992px) and (max-device-width: 1024px) and (orientation: portrait) {
+    background-position: 0px 80px;
+    background-size: 100% 100%;
+  }
+
+  @media screen and (min-device-width: 992px) and (max-device-width: 1024px) and (orientation: landscape) {
+    background-position: 165px 40px;
+    background-size: 100% 75%;
+  }
+
+  @media only screen and (max-width: 991px) {
+    background-position: 0px 80px;
+    background-size: 100% 100%;
+    min-height: calc(100vh - 175px);
+  }
+
+  .banner-text {
+    width: 476px;
+
+    @media only screen and (max-width: 767px) {
+      width: 100%;
+    }
+  }
+
+  .ant-btn.ant-btn-primary{
+    min-width: 195px;
+  }
+
+  h2 {
+    font-weight: 600;
+    font-size: 24px;
+    line-height: 30px;
+    color: #1f2937;
+    margin-bottom: 16px;
+
+    @media only screen and (max-width: 414px) {
+      font-size: 18px;
+      font-weight: 500;
+    }
+
+    span {
+      color: #417837;
+    }
+  }
+
+  p {
+    font-weight: normal;
+    font-size: 16px;
+    line-height: 24px;
+    color: #6b7280;
+    margin-bottom: 40px;
+
+    @media only screen and (max-width: 414px) {
+      font-size: 14px;
+      line-height: 20px;
+    }
+  }
+}

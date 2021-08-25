@@ -1,0 +1,15 @@
+.build/
+.next/
+.vscode/
+node_modules/
+production-server/
+
+test
+.coverage
+
+tos.md
+README.md
+
+.env
+.eslintrc.js
+.gitignore

@@ -1,0 +1,171 @@
+@import "~antd/lib/style/color/colors.less";
+
+.main-plans {
+
+  .main-plans-header {
+    height: 435px;
+    background-color: #417837;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    padding-top: 32px;
+
+    .text-left{
+      width: 100%;
+      text-align: left;
+      margin-bottom: 15px;
+      padding: 0px 20px;
+    }
+
+    .back_btn{
+      font-weight: 600;
+      font-size: 14px;
+      color: #FFFFFF;
+      background-color: transparent;
+      border: 0px;
+      
+      img {
+        margin-right: 14px;
+      }
+    }
+
+    h5 {
+      font-size: 16px;
+      font-weight: 500;
+      line-height: 24px;
+      color: #fff;
+    }
+
+    h1 {
+      font-size: 36px;
+      font-weight: 700;
+      line-height: 42px;
+      color: #fff;
+
+      @media only screen and (max-width: 1024px) {
+        font-size: 24px;
+        margin-top: 15px;
+      }
+    }
+
+    p {
+      font-size: 16px;
+      font-weight: 400;
+      line-height: 24px;
+      color: #e5e7eb;
+
+      @media only screen and (max-width: 1024px) {
+        text-align: left;
+        // padding: 0px 15px;
+      }
+    }
+
+    .container {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      margin: 32px 0 0 0;
+
+      @media only screen and (max-width: 767px) {
+        flex-direction: column;
+      }
+
+      .card-details {
+        display: flex;
+        flex-direction: column;
+        word-break: break-word;
+        align-items: flex-start;
+        padding: 40px 40px 24px;
+
+        @media only screen and (min-width: 768px) and (max-width: 1024px) {
+          padding: 15px;
+        }
+
+        .ant-tag {
+          color: #059669;
+          font-size: 14px;
+          font-weight: 500;
+          line-height: 20px;
+          border-radius: 14px;
+        }
+
+        h1 {
+          font-size: 36px;
+          font-weight: 700;
+          line-height: 42px;
+          color: #1f2937;
+
+          span {
+            font-size: 24px;
+            font-weight: 500;
+            line-height: 32px;
+            color: #6b7280;
+          }
+        }
+
+        p {
+          font-size: 18px;
+          font-weight: 400;
+          line-height: 28px;
+          color: #6b7280;
+        }
+      }
+
+      .features {
+        background-color: #f9fafb;
+        padding: 40px 40px 24px;
+        display: flex;
+        border-radius: 10px;
+        flex-direction: column;
+
+        @media only screen and (min-width: 768px) and (max-width: 1024px) {
+          padding: 15px;
+        }
+
+        ul {
+          list-style: none;
+          padding: 0;
+          min-height: 200px;
+
+          li {
+            color: #6b7280;
+            font-weight: 500;
+            font-size: 16px;
+            line-height: 40px;
+            white-space: nowrap;
+
+            @media only screen and (min-width: 768px) and (max-width: 1024px) {
+              text-overflow: ellipsis;
+              overflow: hidden;
+            }
+          }
+        }
+
+        img {
+          margin-right: 15px;
+        }
+      }
+
+      .ant-card-body {
+        padding: 0px;
+      }
+      .ant-card {
+        box-shadow: 0px 4px 6px -1px rgba(0, 0, 0, 0.1),
+          0px 2px 4px -1px rgba(0, 0, 0, 0.06);
+        border-radius: 10px;
+        margin: 0 15px;
+        width: 334px;
+
+        @media only screen and (min-width: 768px) and (max-width: 1024px) {
+          max-width: 31%;
+          margin: 10px;
+        }
+
+        @media only screen and (max-width: 1024px) {
+          width: 100%;
+          margin-bottom: 20px;
+        }
+      }
+    }
+  }
+}

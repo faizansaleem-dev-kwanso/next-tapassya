@@ -1,0 +1,120 @@
+@import "~antd/lib/style/color/colors.less";
+
+.dashboard-wrapper {
+  h4 {
+    font-size: 18px;
+    font-weight: 600;
+  }
+
+  .avatar-text {
+    @media only screen and (max-width: 1024px) {
+      width: 70%;
+      text-align: center;
+    }
+  }
+
+  .avatar-badge {
+    margin-right: 16px;
+    width: 44px;
+    height: 44px;
+    background: #edf2e9;
+    border-radius: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .ant-card {
+    background: #ffffff;
+    border: 1px solid #cbd5e1;
+    box-shadow: 0px 4px 6px -1px rgba(0, 0, 0, 0.1),
+      0px 2px 4px -1px rgba(0, 0, 0, 0.06);
+    border-radius: 8px;
+
+    @media only screen and (max-width: 1024px) {
+      margin-bottom: 15px;
+    }
+
+    .ant-card-body {
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+    }
+
+    h5 {
+      font-weight: bold;
+      font-size: 24px;
+      color: #1f2937;
+      margin: 0px;
+
+      @media only screen and (max-width: 1024px) {
+        text-align: center;
+      }
+    }
+
+    label {
+      font-weight: 500;
+      font-size: 14px;
+      color: #6b7280;
+      margin: 0px;
+    }
+  }
+}
+
+.graph-grid {
+  padding: 32px 18px;
+  background-color: #ffffff;
+  min-height: calc(100vh - 133px);
+  border-right: 1px solid #e5e7eb;
+
+  @media only screen and (max-width: 1279px) {
+    min-height: auto;
+  }
+}
+
+.organization-graph {
+  margin-top: 39px;
+
+  @media only screen and (max-width: 1199px) {
+    margin-top: 0px;
+  }
+}
+
+.billing-wrapper {
+  padding: 32px 24px;
+}
+
+.organization-members {
+  h3 {
+    padding-bottom: 8px;
+    margin: 0px;
+    border-bottom: 1px solid #e2e8f0;
+  }
+
+  .ant-list-item-meta-title {
+    font-weight: 600;
+    font-size: 18px;
+    color: #1e293b;
+    margin: 0px;
+  }
+
+  .ant-list-item-meta-description {
+    font-weight: normal;
+    font-size: 14px;
+    color: #6b7280;
+  }
+
+  .ant-list-item {
+    padding: 10px 0px;
+  }
+
+  .ant-list-item-meta {
+    display: flex;
+    align-items: center;
+  }
+
+  .ant-avatar {
+    width: 56px;
+    height: 56px;
+  }
+}

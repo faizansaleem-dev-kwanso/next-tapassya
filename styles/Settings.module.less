@@ -1,0 +1,143 @@
+@import "~antd/lib/style/color/colors.less";
+
+.organization-settings {
+  @media only screen and (min-width: 768px) and (max-width: 1024px){
+    width: 75%;
+  }
+
+  .ant-collapse {
+    border: 0px;
+    background-color: transparent;
+
+    .ant-collapse-content {
+      border-top: 0px;
+
+      .ant-collapse-content-box {
+        padding: 16px 24px;
+      }
+
+      .ant-card-body {
+        padding: 0px;
+      }
+
+      h5 {
+        font-weight: 500;
+        font-size: 18px;
+        color: #1f2937;
+        margin-bottom: 4px;
+      }
+
+      p {
+        font-size: 14px;
+        color: #6b7280;
+        margin-bottom: 24px;
+        max-width: 351px;
+        width: 100%;
+      }
+
+      .ant-btn-dangerous {
+        min-width: 116px;
+        height: 28px;
+        font-weight: 500;
+        font-size: 12px;
+        background: #ef4444;
+        border: 1px solid #ef4444;
+        box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.05);
+        border-radius: 4px;
+      }
+    }
+
+    .ant-collapse-item {
+      border-bottom: 0px;
+      margin-bottom: 8px;
+      width: 100%;
+
+      @media only screen and (max-width: 1024px) {
+        max-width: 100%;
+      }
+
+      .ant-collapse-header {
+        background: #ffffff;
+        border: 1px solid #e5e7eb;
+        box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.05);
+        border-radius: 8px;
+        font-weight: 500;
+        font-size: 14px;
+        color: #1f2937;
+        padding: 14px 24px;
+
+        & .ant-collapse-arrow {
+          right: 22px;
+          left: initial;
+
+          & svg {
+            font-size: 17px;
+          }
+        }
+      }
+    }
+  }
+}
+
+.transfer-modal {
+  .ant-modal-body {
+    padding-bottom: 0px;
+  }
+
+  .ant-divider-horizontal {
+    margin: 16px 0px;
+  }
+
+  .ant-form-item-control {
+    width: 100%;
+  }
+
+  .ant-form-item {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding-bottom: 20px;
+
+    .ant-form-item-label {
+      font-weight: 500;
+      font-size: 14px;
+      line-height: 20px;
+      color: #1f2937;
+    }
+
+    input {
+      width: 100%;
+      border: 1px solid #d1d5db;
+      box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.05);
+      border-radius: 6px;
+    }
+  }
+
+  .organization-danger {
+    border: 1px solid #dc2626;
+    padding: 10px 16px 16px;
+    border-radius: 4px;
+    margin-top: 40px;
+
+    @media only screen and (max-width: 767px) {
+      margin-top: 0px;
+    }
+
+    .ant-form-item {
+      margin-bottom: 12px;
+    }
+  }
+
+  .footer-flex {
+    border-top: 1px solid #d1d5db;
+    padding-top: 20px;
+    text-align: right;
+    margin-top: 16px;
+  }
+}
+
+.ant-form-item-explain.ant-form-item-explain-error {
+  color: #c7413c;
+  font-size: 11px;
+  padding-top: 3px;
+}

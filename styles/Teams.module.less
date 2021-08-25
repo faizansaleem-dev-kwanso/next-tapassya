@@ -1,0 +1,941 @@
+@import "~antd/lib/style/color/colors.less";
+
+.team-card.ant-card {
+  box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.1), 0px 1px 2px rgba(0, 0, 0, 0.06);
+  border-radius: 8px;
+  margin-bottom: 20px;
+
+  width: 32%;
+  margin-right: 15px;
+
+  @media only screen and (max-width: 767px) {
+    width: 100%;
+    margin-right: 0px;
+  }
+
+  .ant-card-body {
+    // display: flex;
+    // align-items: flex-end;
+    // justify-content: space-between;
+
+    .link-url-grid {
+      cursor: pointer;
+      // width: 90%;
+    }
+
+    p {
+      margin-bottom: 0px;
+      text-transform: capitalize;
+      word-break: break-word;
+      min-height: 21px;
+    }
+  }
+
+  .ant-btn-link {
+    padding: 0px;
+  }
+
+  h5 {
+    font-weight: 500;
+    font-size: 18px;
+    line-height: 27px;
+    color: #1f2937;
+    text-transform: capitalize;
+    max-width: 129px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+
+  p {
+    font-weight: normal;
+    font-size: 14px;
+    line-height: 21px;
+    color: #6b7280;
+  }
+
+  .ant-card-body {
+    padding: 16px;
+  }
+}
+
+.card-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.ant-popover {
+  width: 120px;
+
+  .ant-popover-inner-content {
+    box-shadow: 0px 0px 0px 1px rgba(0, 0, 0, 0.05),
+      0px 10px 15px -3px rgba(0, 0, 0, 0.1),
+      0px 4px 6px -2px rgba(0, 0, 0, 0.05);
+    border-radius: 6px;
+    padding: 15px;
+  }
+
+  .ant-btn {
+    padding: 0px;
+    margin: 0px;
+    width: 100%;
+    text-align: left;
+    font-size: 14px;
+    color: #1f2937;
+
+    & img {
+      margin-right: 10px;
+    }
+  }
+}
+
+.members-card.ant-card {
+  background-color: transparent;
+  border: 0px;
+  margin-bottom: 20px;
+
+  .ant-card-body {
+    width: 100%;
+    padding: 0px;
+    display: flex;
+    align-items: flex-start;
+  }
+
+  h5,
+  p {
+    line-height: 24px;
+  }
+
+  h5 {
+    font-weight: 500;
+    color: #1e293b;
+    margin-bottom: 8px;
+    font-size: 17px;
+  }
+
+  p {
+    font-size: 17;
+    font-weight: 400;
+    color: #6b7280;
+    margin: 0px;
+  }
+
+  .card-text {
+    padding: 0px 24px;
+    flex: 1;
+
+    button {
+      padding: 0px;
+    }
+  }
+}
+
+.delete-dialog {
+  svg {
+    & path {
+      stroke: #9ca3af;
+    }
+  }
+
+  &:hover {
+    opacity: 1;
+
+    svg {
+      & path {
+        stroke: #ef4444;
+      }
+    }
+  }
+}
+
+.delete-team-modal {
+  .ant-modal-footer {
+    padding: 5px;
+
+    .ant-btn-dangerous {
+      background: #ef4444;
+      border: 1px solid #ef4444;
+      box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.05);
+    }
+  }
+
+  input {
+    border: 1px solid #d1d5db;
+    box-shadow: 0px 1px 2px rgb(0 0 0 / 5%);
+    border-radius: 6px;
+    margin: 15px 0px 5px;
+  }
+}
+
+.add-team-members {
+  .stacks-form .ant-form-item {
+    border-bottom: 0px;
+  }
+
+  .shareable-link-actions {
+    max-width: 388px;
+    margin-left: auto;
+    padding: 10px 0px 50px;
+
+    .ant-btn {
+      font-weight: 500;
+      font-size: 12px;
+      color: #1e293b;
+      padding: 5px 0px;
+
+      & img {
+        margin-right: 10px;
+      }
+    }
+  }
+}
+
+.shareable-link {
+  .ant-form-item-control-input-content {
+    display: flex;
+    align-items: center;
+
+    // & .ant-input {
+    //   margin-right: 15px;
+    // }
+
+    & svg {
+      color: red;
+    }
+  }
+
+  .ant-col.ant-form-item-control {
+    margin-left: auto;
+  }
+
+  .ant-form-item {
+    padding-bottom: 0px !important;
+  }
+}
+
+.invite-people-dialog {
+  .ant-form-item {
+    margin: 16px 0px 22px;
+  }
+
+  button {
+    padding: 5px 0px;
+
+    & img {
+      margin-right: 10px;
+    }
+  }
+
+  .shareable-link-actions {
+    margin-bottom: 22px;
+  }
+
+  .ant-btn-primary.ant-btn {
+    min-width: 129px;
+  }
+}
+
+.member-profile {
+  @media only screen and (max-width: 991px) {
+    padding: 15px;
+  }
+
+  .ant-btn-link-active.teams {
+    border-radius: 0px 0px 0px 10px;
+  }
+
+  .ant-btn-link-active.roles {
+    border-radius: 0px 0px 10px 0px;
+  }
+
+  .ant-btn-link-active {
+    background-color: #417837;
+
+    span {
+      color: #fff !important;
+    }
+  }
+
+  .ant-card {
+    border-radius: 8px;
+    border: 0px;
+    max-width: 886px;
+    margin: 0px auto;
+    margin-top: -70px;
+    background-color: #ffffff;
+    box-shadow: 0px 1px 3px rgb(210, 210, 210, 0.1),
+      0px 1px 2px rgb(210, 210, 210, 0.06);
+  }
+
+  .flex-members-profile {
+    display: flex;
+    align-items: center;
+
+    label,
+    p {
+      font-weight: 500;
+      margin: 0px;
+    }
+
+    label {
+      font-size: 14px;
+      line-height: 20px;
+      color: #4b5563;
+    }
+
+    h5 {
+      font-size: 24px;
+      line-height: 32px;
+      font-weight: bold;
+      color: #111827;
+      margin: 0px;
+
+      @media only screen and (max-width: 480px) {
+        font-size: 18px;
+      }
+    }
+
+    p {
+      font-size: 17px;
+      line-height: 24px;
+      color: #6b7280;
+    }
+  }
+
+  .profile-avatar {
+    margin-right: 20px;
+  }
+
+  .ant-card-actions {
+    background: #f9fafb;
+    border-top: 1px solid #e5e7eb;
+    border-radius: 0px 0px 8px 8px;
+  }
+
+  .ant-card-actions > li {
+    margin: 0px;
+    padding: 0px;
+
+    &:hover {
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    span {
+      font-weight: 500;
+      font-size: 14px;
+      color: #4b5563;
+    }
+  }
+
+  .ant-card-actions > li:not(:last-child) {
+    border-right: 1px solid #e5e7eb;
+  }
+
+  .ant-card-body {
+    @media only screen and (max-width: 480px) {
+      padding: 15px;
+    }
+  }
+}
+
+.shareable-link-actions.d-flex {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.ant-modal.add-team-dialog {
+  width: 613px !important;
+
+  .ant-modal-body {
+    padding: 0px;
+  }
+
+  .ant-modal-footer {
+    padding: 0px;
+  }
+
+  .stacks-form {
+    border: 0px;
+  }
+
+  input,
+  textarea {
+    border: 1px solid #d1d5db;
+    box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.05);
+    border-radius: 6px;
+  }
+
+  .form-footer {
+    text-align: right;
+  }
+}
+
+.invite-team-header {
+  @media only screen and (max-width: 600px) {
+    display: block;
+  }
+
+  h4 {
+    flex: 1;
+  }
+
+  .d-flex {
+    display: flex;
+    align-items: center;
+  }
+
+  .invite-members {
+    background: #6e3778;
+    margin-right: 8px;
+    border: 1px solid #6e3778;
+  }
+}
+
+.teams-data {
+  max-width: 880px;
+  margin: 0px auto;
+  margin-top: 32px;
+
+  @media only screen and (max-width: 991px) {
+    padding: 0px 15px;
+  }
+
+  h3 {
+    font-weight: 600;
+    font-size: 24px;
+    color: #1f2937;
+    padding-bottom: 16px;
+    border-bottom: 1px solid #d1d5db;
+    margin-bottom: 24px;
+  }
+
+  .ant-table-wrapper {
+    width: 100%;
+    overflow: auto;
+  }
+}
+
+.select-role-form {
+  & .ant-form-item-control-input-content {
+    margin: 0px !important;
+  }
+}
+
+.invite-team-member {
+  .ant-modal-close {
+    right: 9px;
+  }
+
+  .ant-row.ant-form-item {
+    border: 0px !important;
+  }
+
+  .d-flex {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+
+    // @media only screen and (max-width: 767px) {
+    //   flex-wrap: wrap;
+    // }
+
+    .ant-form-item {
+      margin: 0px !important;
+      padding: 0px !important;
+      width: 100%;
+    }
+
+    .ant-form-item:last-child {
+      width: 30%;
+
+      @media only screen and (max-width: 767px) {
+        width: 100%;
+      }
+    }
+  }
+
+  .heading-label-form {
+    margin-bottom: 8px !important;
+    border-bottom: 0px !important;
+    padding-bottom: 0px !important;
+  }
+
+  .shareable-link-actions.d-flex {
+    margin-bottom: 24px;
+
+    button {
+      padding: 0px;
+
+      & img {
+        margin-right: 8px;
+      }
+    }
+  }
+
+  .ant-modal-body {
+    padding: 0px !important;
+  }
+
+  .stacks-form {
+    padding: 24px 24px 0px;
+
+    @media only screen and (max-width: 767px){
+      padding: 15px 15px 0px;
+    }
+
+    .ant-form-item {
+      padding: 0px !important;
+      margin: 0px;
+
+      & .ant-form-item-control-input-content {
+        display: flex;
+        align-items: center;
+
+        @media only screen and (max-width: 599px) {
+          flex-wrap: wrap;
+        }
+      }
+    }
+  }
+
+  .ant-modal-footer {
+    padding: 0px !important;
+  }
+
+  .shareable-link .ant-form-item-control-input-content {
+    width: 100%;
+    flex-wrap: initial;
+
+    .ant-form-item {
+      padding: 0px !important;
+      margin: 0px;
+      border-bottom: 0px !important;
+
+      // @media only screen and (max-width: 1024px) {
+      //   width: 100% !important;
+      // }
+    }
+
+    .ant-input {
+      @media only screen and (max-width: 1024px) {
+        width: 100% !important;
+        margin: 0px !important;
+      }
+    }
+  }
+
+  .ant-select:not(.ant-select-customize-input) .ant-select-selector {
+    background: transparent;
+    border: 0px;
+    box-shadow: none;
+    border-radius: 6px;
+    color: #64748b;
+    font-size: 14px;
+    margin-left: 15px;
+    padding: 0px;
+    display: flex;
+    align-items: center;
+
+    @media only screen and (max-width: 599px) {
+      margin-left: 0px;
+    }
+  }
+
+  .ant-select-selection-placeholder {
+    color: #64748b;
+    font-size: 14px;
+  }
+
+  .ant-select-arrow .anticon > svg {
+    color: #64748b;
+  }
+
+  .ant-form-item .ant-select,
+  .ant-form-item .ant-cascader-picker {
+    width: 150px !important;
+  }
+}
+
+.pending-invites-modal {
+  .ant-list-item {
+    @media only screen and (max-width: 599px) {
+      display: block !important;
+    }
+
+    .ant-list-item-action {
+      @media only screen and (max-width: 599px) {
+        margin-top: 15px;
+        width: 100%;
+        text-align: right;
+      }
+    }
+  }
+
+  .ant-checkbox-wrapper {
+    margin-right: 15px;
+  }
+
+  .heading-label-form {
+    margin-bottom: 8px !important;
+    border-bottom: 0px !important;
+    padding-bottom: 0px !important;
+  }
+
+  .ant-tag {
+    display: inline-flex;
+    align-items: center;
+    justify-content: space-between;
+    min-width: 152px;
+    height: 26px;
+    background: #f9fafb;
+    border: 1px solid #e5e7eb;
+    border-radius: 20px;
+    margin: 0px 8px 15px 0px;
+    font-weight: 600;
+    font-size: 12px;
+    color: #1e293b;
+
+    @media only screen and (max-width: 767px) {
+      min-width: 130px;
+    }
+
+    .ant-avatar {
+      width: 16px;
+      height: 16px;
+    }
+  }
+
+  .ant-list-item,
+  .ant-list-item-meta {
+    display: flex !important;
+    align-items: center;
+
+    .ant-avatar {
+      width: 56px;
+      height: 56px;
+    }
+
+    h4 {
+      font-weight: 600;
+      font-size: 18px;
+      margin: 0px;
+      color: #1e293b;
+    }
+
+    .ant-list-item-meta-description {
+      font-size: 14px;
+      color: #6b7280;
+    }
+
+    button {
+      min-width: 54px !important;
+      height: 28px;
+      border: 1px solid #d1d5db;
+      box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.05);
+      border-radius: 4px;
+      font-weight: 500;
+      font-size: 12px;
+      color: #374151;
+    }
+
+    button.button-resend {
+      background: #417837;
+      border: 1px solid #417837;
+      color: #fff !important;
+    }
+
+    .ant-list-item-action-split {
+      display: none;
+    }
+  }
+
+  .ant-modal-body {
+    padding: 24px !important;
+  }
+
+  .ant-modal-footer {
+    padding: 0px !important;
+  }
+}
+
+.modal-footer {
+  background: #f3f4f6;
+  border-radius: 0px 0px 8px 8px;
+  border-top: 1px solid #e5e7eb;
+  text-align: right;
+  padding: 12px 24px;
+
+  button {
+    height: 36px !important;
+    border-radius: 6px;
+  }
+}
+
+.assign-role-filter {
+  display: flex;
+  align-items: center;
+  margin-bottom: 15px;
+
+  .ant-form-item {
+    margin: 0px;
+
+    @media only screen and (max-width: 599px) {
+      width: 100%;
+    }
+  }
+
+  .ant-select:not(.ant-select-customize-input) .ant-select-selector {
+    border: 1px solid #d1d5db;
+    box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.05);
+    border-radius: 6px;
+    color: #64748b;
+    font-size: 14px;
+    margin-right: 15px;
+    padding: 0px;
+    min-height: 38px;
+    padding: 0px 15px;
+    width: 425px;
+
+    @media only screen and (max-width: 599px) {
+      margin-right: 0px;
+      width: 100%;
+      margin-bottom: 15px;
+    }
+  }
+
+  .ant-btn {
+    color: #64748b;
+    font-size: 14px;
+    background-color: transparent;
+    border: 0px;
+    box-shadow: none;
+
+    & img {
+      margin-left: 10px;
+    }
+  }
+}
+
+.assign-role-table {
+  .ant-table {
+    table {
+      border: 1px solid #e5e7eb;
+      box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.1),
+        0px 1px 2px rgba(0, 0, 0, 0.06);
+      border-radius: 8px;
+      width: 100%;
+
+      thead {
+        tr {
+          th {
+            border: 0px;
+            background: #f9fafb;
+            font-weight: 500;
+            font-size: 12px;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            color: #6b7280;
+            border-bottom: 1px solid #e5e7eb;
+            padding: 11px 16px;
+          }
+        }
+      }
+
+      tbody {
+        tr {
+          td {
+            border: 0px;
+            padding: 15px 16px;
+            background-color: #fff;
+            border-bottom: 1px solid #e5e7eb;
+          }
+
+          &:last-child {
+            td {
+              border-bottom: 0px;
+            }
+          }
+        }
+      }
+
+      .user-role-info {
+        display: flex;
+        align-items: center;
+
+        .ant-avatar {
+          margin-right: 16px;
+        }
+
+        .user-name,
+        .user-email {
+          display: block;
+        }
+
+        .user-name {
+          font-weight: 500;
+          font-size: 14px;
+          color: #111827;
+        }
+
+        .user-email {
+          font-weight: normal;
+          font-size: 14px;
+          color: #6b7280;
+        }
+      }
+
+      .ant-tag {
+        background: #f3f4f6;
+        border: 1px solid #f3f4f6;
+        border-radius: 4px;
+        min-width: 80px;
+        height: 20px;
+        font-weight: 400;
+        font-size: 12px;
+        color: #334155;
+      }
+
+      .ant-btn {
+        font-weight: normal;
+        font-size: 14px;
+        color: #dc2626;
+        padding: 0px;
+      }
+    }
+  }
+}
+
+.pending-invitations {
+  h3 {
+    padding: 15px 24px;
+    font-size: 24px;
+    font-weight: 600;
+    margin: 0px;
+    background: #f3f4f6;
+    border-top: 1px solid #d1d5db;
+    border-bottom: 1px solid #d1d5db;
+    display: flex;
+    align-items: center;
+
+    @media only screen and (max-width: 767px){
+      font-size: 14px;
+    }
+  }
+
+  .pending-badge {
+    background: #afd7a8;
+    border-radius: 4px;
+    font-weight: 500;
+    font-size: 14px;
+    color: #417837;
+    width: 24px;
+    height: 24px;
+    margin-left: 8px;
+    text-align: center;
+  }
+
+  .ant-list-item {
+    padding: 16px 24px;
+
+    .ant-list-item-meta-title {
+      font-weight: 600;
+      font-size: 18px;
+      color: #1e293b;
+      margin: 0px;
+    }
+
+    .ant-list-item-meta-description {
+      font-weight: normal;
+      font-size: 14px;
+      color: #6b7280;
+    }
+
+    .ant-list-item-meta {
+      display: flex;
+      align-items: center;
+    }
+
+    .ant-list-item-meta-avatar {
+      margin-right: 8px;
+    }
+
+    .ant-avatar {
+      width: 56px;
+      height: 56px;
+    }
+  }
+
+  .status-badge {
+    background: #fee2e2;
+    border-radius: 4px;
+    font-weight: 500;
+    font-size: 12px;
+    color: #b91c1c;
+    text-align: center;
+    padding: 3px 10px;
+  }
+
+  button {
+    min-width: 54px !important;
+    height: 28px;
+    border: 1px solid #d1d5db;
+    box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.05);
+    border-radius: 4px;
+    font-weight: 500;
+    font-size: 12px;
+    color: #374151;
+  }
+
+  button.button-resend {
+    background: #417837;
+    border: 1px solid #417837;
+    color: #fff !important;
+    height: 28px;
+  }
+}
+
+.d-flex-team {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 20px;
+
+  .default-badge {
+    min-width: 58px;
+    height: 26px;
+    background: #f9fafb;
+    border: 1px solid #e5e7eb;
+    border-radius: 20px;
+    font-weight: 600;
+    font-size: 12px;
+    color: #1e293b;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
+.modal-body {
+  hr {
+    background: #e5e7eb;
+    border: 1px;
+    height: 1px;
+  }
+}
+
+.add-more-input-grid {
+  margin-bottom: 10px !important;
+}
+
+.add-more-input {
+  width: 100%;
+}
+
+.add-another-member {
+  .ant-select.ant-select-single.ant-select-show-arrow {
+    margin-right: 25px;
+  }
+}

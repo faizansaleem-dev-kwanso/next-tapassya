@@ -1,0 +1,188 @@
+@import "~antd/lib/style/color/colors.less";
+
+.avatar-wrapper {
+  position: relative;
+  transition: 0.3s ease-in;
+
+  .ant-btn-primary.ant-btn {
+    position: absolute;
+    bottom: 0px;
+    left: 0;
+    right: 0;
+    background: rgba(255, 255, 255, 0.3);
+    box-shadow: none;
+    border: 0px;
+    cursor: pointer;
+    transition: 0.3s ease-in;
+    margin: 0px auto;
+    padding: 0px;
+    height: 40px;
+    width: 120px;
+    border-radius: 0px 0px 90px 90px;
+    visibility: hidden;
+
+    @media only screen and (max-width: 767px) {
+      bottom: 14px;
+      right: 14px;
+      font-size: 12px;
+    }
+  }
+
+  &:hover,
+  &:focus {
+    .ant-btn {
+      visibility: visible;
+      background: rgba(255, 255, 255, 0.3);
+    }
+  }
+}
+
+.profile-form {
+  max-width: 81%;
+  margin: 0px auto;
+
+  @media only screen and (max-width: 767px) {
+    max-width: 100%;
+    padding: 0px 20px;
+  }
+
+  .ant-avatar {
+    border-radius: 50%;
+    box-shadow: 0px 0px 0px 4px #ffffff;
+    transition: 0.3s ease-in;
+    margin-top: -35px;
+
+    @media only screen and (max-width: 767px) {
+      margin-right: 20px;
+      margin-bottom: 15px;
+    }
+  }
+
+  .user-personal-info {
+    margin-left: 20px;
+
+    @media only screen and (max-width: 767px) {
+      margin-left: 0px;
+    }
+
+    h4 {
+      font-weight: bold;
+      font-size: 24px;
+      color: #111827;
+      margin-bottom: 8px;
+    }
+
+    p {
+      font-size: 14px;
+      color: #6b7280;
+    }
+  }
+
+  .btn-outlined-icon {
+    @media only screen and (max-width: 767px) {
+      margin-top: 6rem;
+    }
+  }
+
+  .profile-button {
+    background: #417837;
+    border-radius: 6px;
+    font-weight: 500;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 100px;
+    height: 38px;
+    cursor: pointer;
+    color: #ffffff;
+
+    @media only screen and (max-width: 767px) {
+      margin-top: 6rem;
+    }
+  }
+}
+
+.account-details {
+  margin-top: 48px;
+
+  h5 {
+    padding: 0px 15px 15px;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #e5e7eb;
+
+    @media only screen and (max-width: 767px) {
+      margin-top: 30px;
+    }
+  }
+}
+
+.form-control {
+  padding-bottom: 20px;
+  margin-bottom: 20px;
+  border-bottom: 1px solid #e5e7eb;
+
+  label {
+    width: 30%;
+
+    @media only screen and (max-width: 767px) {
+      width: 45%;
+    }
+  }
+
+  .right-grid {
+    width: 55%;
+
+    @media only screen and (max-width: 767px) {
+      width: 100%;
+    }
+
+    label {
+      font-weight: 500;
+      font-size: 14px;
+      color: #1f2937;
+      word-break: break-word;
+    }
+  }
+
+  input {
+    max-width: 340px;
+    height: 38px;
+    font-size: 14px;
+    color: #1f2937;
+    border-radius: 6px;
+
+    &::placeholder {
+      color: #1f2937;
+    }
+  }
+}
+
+.justify-content-end {
+  justify-content: flex-end;
+}
+
+.d-flex {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.d-flex-avatar {
+  @media only screen and (max-width: 414px) {
+    flex-wrap: wrap;
+  }
+}
+
+.react-crop {
+  width: 100%;
+  overflow: hidden;
+}
+
+.ant-modal.modal-upload-avatar {
+  width: 700px !important;
+
+  @media only screen and (max-width: 767px) {
+    width: 95% !important;
+  }
+}
