@@ -25,7 +25,6 @@ import { capitalize } from 'lodash';
 
 const { Header, Content, Footer, Sider } = Layout;
 const { Title } = Typography;
-const date = new Date()
 class LayoutComponent extends React.Component<LayoutProps> {
   state = {
     collapsed: false,
