@@ -25,7 +25,7 @@ import { capitalize } from 'lodash';
 
 const { Header, Content, Footer, Sider } = Layout;
 const { Title } = Typography;
-
+const date = new Date()
 class LayoutComponent extends React.Component<LayoutProps> {
   state = {
     collapsed: false,
@@ -274,11 +274,10 @@ class LayoutComponent extends React.Component<LayoutProps> {
     // This renders organization menu dropdown
     const organizationMenu = (
       <Menu className="profile-dropdown-menu">
-        {organizations.map((organization, index) => (
-          <>
+        {organizations.map((organization, index) => {
             {!organization.isAccountDeactivate && (
               <Menu.Item
-                key={organization._id}
+                key={index}
                 data-key={organization._id}
                 onClick={() => {
                   setCurrentOrganization(organization.slug);
@@ -286,7 +285,7 @@ class LayoutComponent extends React.Component<LayoutProps> {
                   router.push(`/${organization.slug}/${Pluralize(COMMON_ENTITY)}`);
                 }}
               >
-                <div className="dropdown-flex">
+                <div className="dropdown-flex" key={index}>
                   <div
                     className="user-badge"
                     style={{
@@ -306,6 +305,7 @@ class LayoutComponent extends React.Component<LayoutProps> {
             )}
             {dividerIndex - 1 === index && !organization.isAccountDeactivate && (
               <hr
+                key={index}
                 style={{
                   border: '1px',
                   height: '1px',
@@ -314,8 +314,7 @@ class LayoutComponent extends React.Component<LayoutProps> {
                 }}
               ></hr>
             )}
-          </>
-        ))}
+        })}
         <Menu.Item key={4}>
           <OrganizationModal onCollapse={this.onCollapse} />
         </Menu.Item>
