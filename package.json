@@ -5,7 +5,8 @@
   "scripts": {
     "dev": "next dev",
     "netlify": "netlify dev -p 3000",
-    "build": "next build",
+    "build": "next build && npm run postbuild",
+    "postbuild": "next-on-netlify",
     "postinstall": "next build && rm -rf production-server/",
     "start": "node production-server/server/app.js",
     "lint": "eslint . --ext .ts,.tsx",
