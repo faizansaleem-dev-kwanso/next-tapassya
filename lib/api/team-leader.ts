@@ -34,7 +34,9 @@ export const getTeam = (options: GetTeamParams): Promise<TeamResponse> =>
 
 export const searchTeams = (options: TeamParamsInterface): Promise<TeamResponse> =>
   sendRequestAndGetResponse(
-    `${BASE_PATH}/teams/search-teams/${options.organizationId}?search=${options.search}&page=${options.page}&limit=${options.limit}`,
+    `${BASE_PATH}/teams/search-teams/${options.organizationId}?search=${encodeURIComponent(
+      options.search,
+    )}&page=${options.page}&limit=${options.limit}`,
     {
       method: 'GET',
       ...options,

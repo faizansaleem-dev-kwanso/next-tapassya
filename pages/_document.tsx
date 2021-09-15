@@ -3,7 +3,7 @@ import React from 'react';
 import { URL_API, ZENDESK_CHAT_ACCOUNT_KEY } from 'lib/consts';
 
 class MyDocument extends Document {
-  public renderZendeskSnippet(): string {
+  public renderZendeskSnippet() {
     return `
       window.zESettings = {
         webWidget: {
@@ -14,7 +14,6 @@ class MyDocument extends Document {
                   credentials: 'include',
                 }).then(function (res) {
                   res.json().then(function (jwt) {
-                    console.log("jwt", jwt);
                     jwt.token && callback(jwt.token);
                     ;
                   });
@@ -27,7 +26,7 @@ class MyDocument extends Document {
     `;
   }
 
-  public renderSnippetsForSignedInUsers(): JSX.Element {
+  public renderSnippetsForSignedInUsers() {
     return (
       <>
         <script
@@ -39,7 +38,7 @@ class MyDocument extends Document {
     );
   }
 
-  public render(): JSX.Element {
+  public render() {
     const { pageProps } = this.props.__NEXT_DATA__.props;
     const user = pageProps.initialState && pageProps.initialState.user;
     const isThemeDark = user && user.darkTheme;

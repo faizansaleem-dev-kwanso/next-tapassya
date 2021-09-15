@@ -77,6 +77,10 @@
   .ant-badge {
     position: relative;
     left: 32px;
+
+    @media only screen and (max-width: 767px){
+      left: 10px;
+    }
   }
 }
 
@@ -97,11 +101,11 @@
 }
 
 .ant-badge {
-  padding: 7px 10px !important;
+  padding: 7px 10px;
   border-radius: 4px;
   font-weight: 500;
-  font-size: 12px !important;
-  display: flex !important;
+  font-size: 12px;
+  display: flex;
   align-items: center;
   justify-content: space-between;
 }
@@ -151,7 +155,7 @@
   border-radius: 8px 8px 0px 0px;
 
   .ant-form-item {
-    padding: 16px 0px;
+    padding: 8px 0px 16px;
     margin: 0px;
     border-bottom: 1px solid #e5e7eb;
 
@@ -218,7 +222,8 @@
     }
   }
 
-  .ant-input-group-addon {
+  .ant-input-group-addon,
+  .ant-input-group-addon:first-child {
     background: #f9fafb;
     border: 1px solid #d1d5db;
     border-right: 0px;
@@ -265,7 +270,7 @@
     content: "*";
 
     @media only screen and (max-width: 560px) {
-      display: block !important;
+      display: inline-flex !important;
     }
   }
 
@@ -276,6 +281,14 @@
 
   .ant-select-multiple .ant-select-selection-search:first-child > .ant-select-selection-search-input{
     margin-left: 18.5px !important;
+  }
+  .right-grid .ant-tag {
+    max-width: 15ch;
+    overflow: hidden;
+    white-space: nowrap;
+    font-size: 14px;
+    text-overflow: ellipsis;
+    margin-bottom: 8px !important;
   }
 }
 
@@ -335,6 +348,7 @@
 }
 
 .stacks-card-services {
+  
   .d-flex {
     display: flex;
     align-items: center;
@@ -376,30 +390,49 @@
     }
   }
 
-  .stop-service-button {
+  .stop-service-button.ant-btn-primary {
     background: #ef4444;
     border: 1px solid #ef4444;
     color: #ffffff;
 
     &:hover {
-      background: #ef4444;
-      border: 1px solid #ef4444;
-      color: #ffffff;
+      background: #ef4444 !important;
+      border: 1px solid #ef4444 !important;
+      color: #ffffff !important;
     }
   }
 
   .delete-stack-button {
+    border-radius: 6px;
     background: #fef2f2;
     border: 1px solid #fef2f2;
     box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.05);
     color: #b91c1c;
+
+    &:disabled{
+      background-color: #efefef;
+      border: 1px solid #e0dfdf;
+      color: #d4d4d4;
+
+      &:hover{
+        background-color: #efefef;
+        border: 1px solid #e0dfdf;
+        color: #d4d4d4;
+      }
+    }
+
+    &:hover{
+      background: #fef2f2;
+      border: 1px solid #fef2f2;
+      color: #b91c1c;
+    }
   }
 
   .ant-btn-primary.ant-btn {
     border-radius: 6px;
     font-weight: 500;
     font-size: 14px;
-    min-width: 172px;
+    min-width: 133px;
     height: 36px;
     // margin-top: 15px;
   }
@@ -422,8 +455,14 @@
   padding-bottom: 16px;
   border-bottom: 1px solid #e5e7eb;
 
+  h4 {
+    font-size: 24px;
+    font-weight: 500;
+  }
+
   p {
     font-size: 14px;
+    font-weight: 400;
     color: #6b7280;
     margin: 4px 0px 0px;
   }
@@ -588,6 +627,7 @@
     font-weight: normal;
     font-size: 14px;
     color: #6b7280;
+    word-break: break-word;
   }
 }
 
@@ -601,5 +641,19 @@
   .ant-form-item-label
     > label.ant-form-item-required:not(.ant-form-item-required-mark-optional)::before {
     content: "";
+  }
+}
+
+#transferAccountForm{
+  .ant-form-item-label > label::after{
+    color: #c7413c !important;
+    content: "*" !important;
+    display: inline-flex !important;
+  } 
+}
+
+.delete-team-modal{
+  p {
+    word-break: break-word;
   }
 }

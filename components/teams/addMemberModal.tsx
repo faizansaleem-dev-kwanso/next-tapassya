@@ -178,22 +178,26 @@ const AddMemberModal: FC<AddMemberModalProps> = (props): JSX.Element => {
           </div>
           <p>Invite members that are already part of your organization</p>
         </div>
-        {tags.map((tag, index) => (
-          <Tag key={index}>
-            <Avatar
-              icon={tag.avatarUrl !== '' || null ? <img src={tag.avatarUrl} /> : <UserOutlined />}
-              style={{ backgroundColor: 'grey' }}
-            />
-            {tag.name}
-            <img
-              src="/tag-close.svg"
-              alt="close"
-              onClick={() => {
-                removeMember(index);
-              }}
-            />
-          </Tag>
-        ))}
+        <div>
+          {tags.map((tag, index) => (
+            <Tag key={index}>
+              <Avatar
+                icon={tag.avatarUrl !== '' || null ? <img src={tag.avatarUrl} /> : <UserOutlined />}
+                size={20}
+                style={{ backgroundColor: 'grey', marginRight: 10 }}
+              />
+              <span className="tag-name">{tag.name}</span>
+              <img
+                style={{ marginLeft: 10 }}
+                src="/tag-close.svg"
+                alt="close"
+                onClick={() => {
+                  removeMember(index);
+                }}
+              />
+            </Tag>
+          ))}
+        </div>
         <Input
           type="text"
           placeholder="Search a member"

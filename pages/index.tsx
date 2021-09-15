@@ -1,8 +1,9 @@
 import { withAuth } from 'lib/auth';
+import { GetServerSideProps } from 'next';
 import Link from 'next/link';
 import * as React from 'react';
 
-const Home = (): JSX.Element => {
+const Home = () => {
   return (
     <div style={{ textAlign: 'center', margin: '20px' }}>
       <h1>Landing Page</h1>
@@ -23,5 +24,5 @@ const Home = (): JSX.Element => {
     </div>
   );
 };
-export const getServerSideProps = withAuth(null, { logoutRequired: true });
+export const getServerSideProps: GetServerSideProps = withAuth(null, { logoutRequired: true });
 export default Home;

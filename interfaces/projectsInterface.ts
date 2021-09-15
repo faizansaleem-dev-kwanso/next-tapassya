@@ -1,5 +1,5 @@
 import { NextRouter } from 'next/router';
-import { Store } from '../lib/store';
+import { Store, Team } from '../lib/store';
 import { InitialStateInterface, Paginate } from 'interfaces';
 
 export interface Lti11ObjectInterface {
@@ -43,11 +43,13 @@ export interface ProjectCardInterface {
   isCopy: boolean;
   setIsCopied: () => void;
   actions: [ActionsInterface];
+  index?: number;
 }
 
 export interface ProjectUpdateInterface {
   name: string;
   stage: string;
+  teams: string[];
   subDomain: string;
   defaultAuth: string;
   organizationId: string;
@@ -91,6 +93,7 @@ export interface ProjectInterface {
   deleted: boolean;
   teamId: string;
   name: string;
+  userId: string;
   subDomain: string;
   stage: string;
   defaultAuth: string;
@@ -100,7 +103,7 @@ export interface ProjectInterface {
   lti13?: Lti13ObjectInterface;
   actions: [ActionsInterface];
   organizationId: string;
-  teams?: string[];
+  teams?: Team[];
 }
 
 export interface ProjectResponseInterface {

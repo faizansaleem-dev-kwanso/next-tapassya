@@ -43,9 +43,13 @@ const RolesTable: FC<RolesTableProps> = (props): JSX.Element => {
       // eslint-disable-next-line react/display-name
       render: (user, index) =>
         user.role !== 'ADMIN' && (
-          <Button key={index} type="link" danger onClick={() => deleteRole(user)}>
-            Delete
-          </Button>
+          <Button
+            icon={<img src="/delete-icon.svg" />}
+            key={index}
+            type="link"
+            danger
+            onClick={() => deleteRole(user)}
+          />
         ),
     },
   ];

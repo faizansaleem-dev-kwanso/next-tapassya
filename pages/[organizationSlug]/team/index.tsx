@@ -56,7 +56,7 @@ const Teams: FC<TeamPageProps> = (props): JSX.Element => {
    * @param event
    */
   const handleSearch = (event: React.ChangeEvent<HTMLInputElement>): void => {
-    setSearch(event.target.value.replace(/[^a-zA-Z0-9 ]/g, ''));
+    setSearch(event.target.value);
   };
 
   useEffect(() => {
@@ -67,6 +67,7 @@ const Teams: FC<TeamPageProps> = (props): JSX.Element => {
     if (search.length === 0) {
       getTeams({ page: 1 });
     } else if (search.length >= 3) {
+      console.log(search, '<<<SEARCH');
       searchTeam({
         organizationId: currentOrganization._id,
         search: search,
@@ -84,21 +85,25 @@ const Teams: FC<TeamPageProps> = (props): JSX.Element => {
       </Head>
       {currentOrganization.isTransferred && <OrganizationNotification />}
       <Breadcrumb className="breadcrumb">
-        <Link href={`/${currentOrganization.slug}/${Pluralize(COMMON_ENTITY)}`}>
+        <Breadcrumb.Item>
+          <Link href={`/${currentOrganization.slug}/${Pluralize(COMMON_ENTITY)}`}>
+            <a>
+              <span className="breadcrumb__inner">
+                <img src="/home.svg" alt="home" />
+              </span>
+            </a>
+          </Link>
+        </Breadcrumb.Item>
+        <Breadcrumb.Item>
           <a>
-            <span className="breadcrumb__inner">
-              <img src="/home.svg" alt="home" />
-            </span>
+            <span className="breadcrumb__inner">Teams</span>
           </a>
-        </Link>
-        <a>
-          <span className="breadcrumb__inner">Teams</span>
-        </a>
+        </Breadcrumb.Item>
       </Breadcrumb>
       <div className="main-wrapper">
         <div className="page-header-stacks">
           <div className="search-input">
-            <h4>Team</h4>
+            <h4>Teams</h4>
 
             <Input
               size="large"

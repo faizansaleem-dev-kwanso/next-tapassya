@@ -10,8 +10,8 @@ import '../styles/Stacks.module.less';
 import '../styles/Layout.module.less';
 import OnboardingHeader from 'components/common/OnboardingHeader';
 import { UserInfoProps, UserInfoState } from 'interfaces';
-import Pluralize from 'pluralize';
-import { COMMON_ENTITY, FormRules } from 'lib/consts';
+import { FormRules } from 'lib/consts';
+import { GetServerSideProps } from 'next';
 
 const layout = {
   labelCol: { span: 8 },
@@ -57,17 +57,9 @@ class UserInfo extends React.Component<UserInfoProps, UserInfoState> {
       this.setState({ disabled: true });
 
       await updateProfile({ firstName, lastName, avatarUrl: '' });
-      if (currentOrganization) {
-        this.setState({ loading: true });
-        const response = await addOrganization({
-          name: '',
-        });
-        if (response.status === 200) {
-          this.setState({ loading: false });
-          Router.push(`/${currentOrganization.slug}/${Pluralize(COMMON_ENTITY)}`);
-          notify('Redirecting...', 'success', true);
-          NProgress.done();
-        }
+      if (currentOrganization && currentOrganization.ownerId === currentUser._id) {
+        Router.push('/plans');
+        notify('Redirecting...', 'success', true);
       } else {
         this.setState({ loading: true });
         const response = await addOrganization({
@@ -86,6 +78,7 @@ class UserInfo extends React.Component<UserInfoProps, UserInfoState> {
         }
       }
     } catch (error) {
+      this.setState({ loading: false });
       NProgress.done();
       notify(error, 'error', true);
     } finally {
@@ -95,6 +88,7 @@ class UserInfo extends React.Component<UserInfoProps, UserInfoState> {
 
   public render() {
     const { store } = this.props;
+    const { currentOrganization } = store;
     const user = store.currentUser;
 
     return (
@@ -113,6 +107,10 @@ class UserInfo extends React.Component<UserInfoProps, UserInfoState> {
               {...layout}
               name="userInfo"
               initialValues={{
+                organizationName:
+                  currentOrganization && currentOrganization.ownerId === user._id
+                    ? currentOrganization.name
+                    : '',
                 email: user.email,
                 firstName: user.firstName,
                 lastName: user.lastName,
@@ -130,7 +128,12 @@ class UserInfo extends React.Component<UserInfoProps, UserInfoState> {
                   name="organizationName"
                   rules={[FormRules.organizationName]}
                 >
-                  <Input maxLength={50} />
+                  <Input
+                    maxLength={50}
+                    readOnly={
+                      currentOrganization && currentOrganization.ownerId === user._id ? true : false
+                    }
+                  />
                 </Form.Item>
                 <Form.Item label="Email Address" name="email">
                   <Input readOnly={true} />
@@ -174,6 +177,6 @@ class UserInfo extends React.Component<UserInfoProps, UserInfoState> {
   }
 }
 
-export const getServerSideProps = withAuth(null, { dontRedirect: true });
+export const getServerSideProps: GetServerSideProps = withAuth(null, { dontRedirect: true });
 
 export default inject('store')(observer(UserInfo));

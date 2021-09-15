@@ -1,7 +1,7 @@
 import Router, { withRouter } from 'next/router';
 import Link from 'next/link';
-import React from 'react';
-import { Avatar, Button, Dropdown, Layout, Menu, Typography, Tooltip } from 'antd';
+import React, { Fragment } from 'react';
+import { Avatar, Button, Dropdown, Layout, Menu, Typography } from 'antd';
 import { observer } from 'mobx-react';
 import {
   BellOutlined,
@@ -25,13 +25,14 @@ import { capitalize } from 'lodash';
 
 const { Header, Content, Footer, Sider } = Layout;
 const { Title } = Typography;
+
 class LayoutComponent extends React.Component<LayoutProps> {
   state = {
     collapsed: false,
     visible: false,
     open: false,
     isAdmin: false,
-    isInstructor: false,
+    isMember: false,
     isOrganization: false,
     paymentFail: false,
   };
@@ -60,6 +61,10 @@ class LayoutComponent extends React.Component<LayoutProps> {
     const { store, router } = this.props;
     const { currentOrganization, organizations, socket, organizationStore, currentUser } = store;
     const billing = currentOrganization.billingId;
+
+    if (!currentUser.isActive) {
+      router.push('/account-deactivated');
+    }
 
     if (window && billing.isPaymentFailed) {
       window.location.pathname === '/plans'
@@ -129,18 +134,14 @@ class LayoutComponent extends React.Component<LayoutProps> {
       await store.setSocket(socket);
     }
 
-    try {
-      const response = await isUserAdmin();
-      response.status === 200
-        ? this.setState({
-            isAdmin: response.isAdmin,
-            isInstructor: response.isInstructor,
-            isOrganization: response.isOrganization,
-          })
-        : '';
-    } catch (error) {
-      console.error(error);
-    }
+    const response = await isUserAdmin();
+    response.status === 200
+      ? this.setState({
+          isAdmin: response.isAdmin,
+          isMember: response.isMember,
+          isOrganization: response.isOrganization,
+        })
+      : '';
   }
 
   public propagateClick = (id: string) => (event) => {
@@ -174,14 +175,18 @@ class LayoutComponent extends React.Component<LayoutProps> {
 
   // This function gets default selected keys from store
   getDefaultSelected = () => {
-    const { store } = this.props;
-    const { currentOrganization } = store;
     const { pathname } = window.location;
-    if (pathname === `/${currentOrganization.slug}/${Pluralize(COMMON_ENTITY)}`) {
-      return ['0'];
+    if (pathname.includes(Pluralize(COMMON_ENTITY))) {
+      return ['1'];
+    }
+    if (pathname === '/organization-settings') {
+      return ['3'];
+    }
+    if (pathname.includes('team')) {
+      return ['2'];
     }
     if (pathname.startsWith('/feedback')) {
-      return ['1'];
+      return [''];
     }
     return [];
   };
@@ -238,24 +243,22 @@ class LayoutComponent extends React.Component<LayoutProps> {
       <Menu onClick={this.handleMenuClick} className="profile-menu">
         {!this.isOnboardingPage() && (
           <>
-            <Menu.Item key={1}>
+            <Menu.Item>
               <label>Signed in as</label>
-              <Tooltip title={currentUser.email}>
-                <Title level={5} className="email-ellipsis">
-                  {currentUser.email}
-                </Title>
-              </Tooltip>
+              <Title level={5} className="email-ellipsis">
+                {currentUser.email}
+              </Title>
             </Menu.Item>
             <Menu.Divider />
-            <Menu.Item key={2}>
+            <Menu.Item>
               <Link href="/profile-settings">
-                <Button type="link">Account settings</Button>
+                <Button type="link">Profile settings</Button>
               </Link>
             </Menu.Item>
             <Menu.Divider />
           </>
         )}
-        <Menu.Item key={3}>
+        <Menu.Item>
           <Button
             href={`${URL_API}/api/v1/auth0/logout`}
             type="link"
@@ -273,10 +276,11 @@ class LayoutComponent extends React.Component<LayoutProps> {
     // This renders organization menu dropdown
     const organizationMenu = (
       <Menu className="profile-dropdown-menu">
-        {organizations.map((organization, index) => {
+        {organizations.map((organization, index) => (
+          <Fragment key={index}>
             {!organization.isAccountDeactivate && (
               <Menu.Item
-                key={index}
+                key={organization._id}
                 data-key={organization._id}
                 onClick={() => {
                   setCurrentOrganization(organization.slug);
@@ -284,7 +288,7 @@ class LayoutComponent extends React.Component<LayoutProps> {
                   router.push(`/${organization.slug}/${Pluralize(COMMON_ENTITY)}`);
                 }}
               >
-                <div className="dropdown-flex" key={index}>
+                <div className="dropdown-flex">
                   <div
                     className="user-badge"
                     style={{
@@ -304,7 +308,6 @@ class LayoutComponent extends React.Component<LayoutProps> {
             )}
             {dividerIndex - 1 === index && !organization.isAccountDeactivate && (
               <hr
-                key={index}
                 style={{
                   border: '1px',
                   height: '1px',
@@ -313,8 +316,9 @@ class LayoutComponent extends React.Component<LayoutProps> {
                 }}
               ></hr>
             )}
-        })}
-        <Menu.Item key={4}>
+          </Fragment>
+        ))}
+        <Menu.Item>
           <OrganizationModal onCollapse={this.onCollapse} />
         </Menu.Item>
       </Menu>
@@ -356,7 +360,7 @@ class LayoutComponent extends React.Component<LayoutProps> {
                 </div>
               </div>
               <Menu theme="light" mode="inline" selectedKeys={this.getDefaultSelected()}>
-                <Menu.Item className="profile-dropdown-link" data-key="1" key={5}>
+                <Menu.Item className="profile-dropdown-link" data-key="1">
                   <Dropdown overlay={organizationMenu} trigger={['click']}>
                     <a
                       className="ant-dropdown-link d-flex-profile"
@@ -373,27 +377,24 @@ class LayoutComponent extends React.Component<LayoutProps> {
                     </a>
                   </Dropdown>
                 </Menu.Item>
-                <Menu.Item key={6}>
+                <Menu.Divider />
+                <Menu.Item key="1">
                   <Link href={`/${currentOrganization.slug}/${Pluralize(COMMON_ENTITY)}`}>
                     <Button icon={<img src="/stacks.svg" alt="stacks" />} type="link">
                       {capitalize(Pluralize(COMMON_ENTITY))}
                     </Button>
                   </Link>
                 </Menu.Item>
-                <Menu.Divider />
-                <Menu.Item key={7}>
+
+                <Menu.Item key="2">
                   <Link href={`/${currentOrganization.slug}/team`}>
                     <Button icon={<img src="/Teams.svg" alt="stacks" />} type="link">
                       Teams
                     </Button>
                   </Link>
                 </Menu.Item>
-                <Menu.SubMenu
-                  icon={<img src="/resources.svg" alt="resources" />}
-                  title="Resources"
-                  key={8}
-                >
-                  <Menu.Item key={9}>
+                <Menu.SubMenu icon={<img src="/resources.svg" alt="resources" />} title="Resources">
+                  <Menu.Item>
                     <a href="https://docs.illumidesk.com" rel="noopener noreferrer" target="_blank">
                       <FontAwesomeIcon icon={faExternalLinkAlt} />
                       <span>Documentation</span>
@@ -411,14 +412,14 @@ class LayoutComponent extends React.Component<LayoutProps> {
                 {currentOrganization.ownerId !== currentUser._id ? (
                   ''
                 ) : (
-                  <Menu.Item key={10}>
+                  <Menu.Item key="5">
                     <Button
                       icon={<img src="/invite-member-icon.svg" alt="invite member" />}
-                      onClick={() =>
+                      onClick={() => {
                         window.innerWidth <= 1024
                           ? this.setState({ open: true, collapsed: true })
-                          : this.setState({ open: true })
-                      }
+                          : this.setState({ open: true });
+                      }}
                       type="link"
                     >
                       Invite Member
@@ -429,7 +430,7 @@ class LayoutComponent extends React.Component<LayoutProps> {
                 {currentOrganization.ownerId !== currentUser._id ? (
                   ''
                 ) : (
-                  <Menu.Item key={11}>
+                  <Menu.Item key="3">
                     <Link href="/organization-settings">
                       <Button icon={<img src="/Setting-icon.svg" alt="settings" />} type="link">
                         Settings
@@ -443,6 +444,7 @@ class LayoutComponent extends React.Component<LayoutProps> {
         <Layout className="site-layout">
           <Header className="site-layout-background">
             {currentOrganization &&
+            currentOrganization.billingId.isCard &&
             typeof window !== 'undefined' &&
             window.location.pathname !== `/${currentOrganization.slug}/setup-complete` &&
             window.location.pathname !== `/${currentOrganization.slug}/start-trial`

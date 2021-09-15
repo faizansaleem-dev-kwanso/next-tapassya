@@ -5,6 +5,7 @@ import '../styles/404.module.less';
 import { checkInvitationVerification } from 'lib/api/public';
 import { URL_API } from 'lib/consts';
 import router from 'next/router';
+import { GetServerSideProps, GetServerSidePropsContext } from 'next';
 
 interface LinkProps {
   token: string;
@@ -71,13 +72,9 @@ const LinkExpire: React.FC<LinkProps> = (props): JSX.Element => {
   );
 };
 
-export const getServerSideProps = async (context: {
-  query: { token: string };
-}): Promise<{
-  props: {
-    token: string;
-  };
-}> => {
+export const getServerSideProps: GetServerSideProps = async (
+  context: GetServerSidePropsContext,
+) => {
   return {
     props: {
       token: context.query.token,

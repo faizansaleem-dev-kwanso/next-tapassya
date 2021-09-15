@@ -55,3 +55,8 @@ export const getOrganizationDefaultTeam = (organizationId: string): Promise<Orga
   sendRequestAndGetResponse(`${BASE_PATH}/get-organization-default-team/${organizationId}`, {
     method: 'GET',
   });
+
+export const getResources = (): Promise<OrganizationResponse> =>
+  sendRequestAndGetResponse(`${BASE_PATH}/list-resources`, {
+    method: 'GET',
+  });

@@ -13,8 +13,8 @@ import {
   Row,
   Badge,
   Typography,
-  Tag,
 } from 'antd';
+import { SearchOutlined } from '@ant-design/icons';
 import Head from 'next/head';
 import Link from 'next/link';
 import Layout from '../../../components/layout';
@@ -44,6 +44,7 @@ class StacksID extends React.Component<StackIdProps, StackIdState> {
     isShowModalStop: false,
     isShowModalDelete: false,
     isShowModalDeploy: false,
+    teams: [''],
     isDeploying: false,
     errors: {},
   };
@@ -52,22 +53,34 @@ class StacksID extends React.Component<StackIdProps, StackIdState> {
   public update = async (data: ProjectUpdateInterface) => {
     try {
       const { router, store, stackStore } = this.props;
-
+      const { teams } = store;
+      const teamIds = [];
       const organization = store.currentOrganization;
-      data.organizationId = organization._id;
-      const res = await stackStore.updateStack({
-        stackId: router.query.stackId,
-        data: { ...data },
+      this.state.teams.forEach((stateTeam) => {
+        const team = teams.filter((team) => team.name === stateTeam);
+        if (team) {
+          teamIds.push(team[0]._id);
+        }
       });
-      if (res.status === 200) {
-        this.setState({
-          stack: res.project,
-          defaultAuth: res.project.defaultAuth,
-        });
-        notify(res.message, 'success');
-        router.push(`/${organization.slug}/${Pluralize(COMMON_ENTITY)}`);
+      data.organizationId = organization._id;
+      data.teams = teamIds;
+      if (teamIds.length <= 0) {
+        notify('You need to select atleast 1 team to update', 'error');
       } else {
-        notify(res.message, 'error');
+        const res = await stackStore.updateStack({
+          stackId: router.query.stackId,
+          data: { ...data },
+        });
+        if (res.status === 200) {
+          this.setState({
+            stack: res.project,
+            defaultAuth: res.project.defaultAuth,
+          });
+          notify(res.message, 'success');
+          router.push(`/${organization.slug}/${Pluralize(COMMON_ENTITY)}`);
+        } else {
+          notify(res.message, 'error');
+        }
       }
     } catch (error) {
       notify(error, 'error');
@@ -154,8 +167,8 @@ class StacksID extends React.Component<StackIdProps, StackIdState> {
     try {
       this.setState({ disabled: true, isDeploying: true });
       const { router } = this.props;
-      const res = await actionOnStack(router.query.id, 'deploy');
-      if (res.error) {
+      const res = await actionOnStack(router.query.stackId, 'deploy');
+      if (res.error || res.status === 400) {
         this.setState({ isDeploying: false });
         const errorProps = {};
         if (res.errorCode === 'STRIPE_PLAN_CHANGE') {
@@ -168,7 +181,8 @@ class StacksID extends React.Component<StackIdProps, StackIdState> {
         Modal.error({
           title: 'Error!',
           content: (
-            <div>
+            <div className="error-info-stack">
+              {res.status === 400 && <p>{res.message}</p>}
               <p>{res.error}</p>
             </div>
           ),
@@ -184,8 +198,8 @@ class StacksID extends React.Component<StackIdProps, StackIdState> {
           content: (
             <div>
               <p>
-                You may continue to work on other items and will be notified once your Project’s
-                cluster is available.
+                You may continue to work on other items and will be notified once your{' '}
+                {COMMON_ENTITY}'s cluster is available.
                 <b>{res.trialStarted && ' We have started your 2 week trial from today'}</b>
               </p>
             </div>
@@ -206,11 +220,12 @@ class StacksID extends React.Component<StackIdProps, StackIdState> {
       this.setState({ disabled: true });
       const { router } = this.props;
       const res = await actionOnStack(router.query.stackId, 'stop');
-      if (res.error) {
+      if (res.error || res.status === 400) {
         Modal.error({
           title: 'Error!',
           content: (
             <div>
+              {res.status === 400 && <p>{res.message}</p>}
               <p>{res.error}</p>
             </div>
           ),
@@ -241,16 +256,36 @@ class StacksID extends React.Component<StackIdProps, StackIdState> {
 
   // This function gets all projects from database after component is mounted
   public async componentDidMount() {
-    const { router, stackStore } = this.props;
+    const { router, stackStore, store } = this.props;
+    const { teamStore, currentOrganization } = store;
+    const { getOrganizationTeams } = teamStore;
     const { getStackById } = stackStore;
+    await getOrganizationTeams();
     const response = await getStackById(router.query.stackId);
     if (response.status === 200) {
       const stack = response.project;
-      this.setState({ stack, defaultAuth: stack.defaultAuth, loading: false });
+      if (stack.organizationId !== currentOrganization._id || stack.deleted) {
+        router.push('/404');
+      } else {
+        this.setState({
+          stack,
+          defaultAuth: stack.defaultAuth,
+          loading: false,
+          teams: stack.teams.map((team) => {
+            return team.name;
+          }),
+        });
+      }
     } else {
-      notify(response.message, 'error');
+      router.push('/404');
     }
   }
+
+  public handleTeamChange = (e: string[]) => {
+    this.setState({
+      teams: e,
+    });
+  };
 
   // This function renders project Auth Form
   public renderAuthForm() {
@@ -302,7 +337,7 @@ class StacksID extends React.Component<StackIdProps, StackIdState> {
             name={['lti11', 'consumerKey']}
             rules={[{ required: true, message: 'Please input your consumer key!' }]}
           >
-            <Input required={true} />
+            <Input required={true} maxLength={256} />
           </Form.Item>
           <Form.Item
             label="Shared Secret"
@@ -320,7 +355,8 @@ class StacksID extends React.Component<StackIdProps, StackIdState> {
   // This function renders settings for projects
   public renderSettings() {
     const { store } = this.props;
-    const organization = store.currentOrganization;
+    const { teams, currentOrganization } = store;
+    const organization = currentOrganization;
     const { stack, errors } = this.state;
     const { actions } = stack;
     const { text, unProvisionedAction, className, classNameDot, comment } =
@@ -332,7 +368,11 @@ class StacksID extends React.Component<StackIdProps, StackIdState> {
       <div>
         <Row gutter={16}>
           <Col span={17} xl={17} lg={24} md={24} sm={24} xs={24}>
-            <Form name="stack" initialValues={stack} onFinish={this.update}>
+            <Form
+              name="stack"
+              initialValues={{ ...stack, Teams: this.state.teams }}
+              onFinish={this.update}
+            >
               <div className="stacks-form">
                 <Form.Item
                   label={`${capitalize(COMMON_ENTITY)} Name`}
@@ -346,7 +386,7 @@ class StacksID extends React.Component<StackIdProps, StackIdState> {
                     },
                   ]}
                 >
-                  <Input required={true} maxLength={128} />
+                  <Input required={true} maxLength={50} />
                 </Form.Item>
 
                 <Form.Item
@@ -375,16 +415,28 @@ class StacksID extends React.Component<StackIdProps, StackIdState> {
                   validateStatus={errors['stage'] ? 'error' : undefined}
                   help={errors['stage'] ? errors['stage'].message : undefined}
                 >
-                  <Input />
+                  <Input maxLength={50} />
                 </Form.Item>
                 <Form.Item label="Teams">
-                  <div>
-                    {this.state.stack.teams.map((team, index) => (
-                      <Tag key={index}>{team.name} </Tag>
+                  <Select
+                    className="add-multiple-team"
+                    mode="multiple"
+                    defaultValue={this.state.teams}
+                    onChange={this.handleTeamChange}
+                    placeholder={
+                      <>
+                        <SearchOutlined /> Search Teams
+                      </>
+                    }
+                    style={{ width: '100%' }}
+                  >
+                    {teams.map((team) => (
+                      <Option value={team.name} key={team._id}>
+                        {team.name}
+                      </Option>
                     ))}
-                  </div>
+                  </Select>
                 </Form.Item>
-
                 <Form.Item
                   label="Authorization URL"
                   name="defaultAuth"
@@ -459,7 +511,8 @@ class StacksID extends React.Component<StackIdProps, StackIdState> {
                 </div>
                 <Button
                   type="primary"
-                  className="stop-service-button"
+                  danger
+                  // className="stop-service-button"
                   disabled={text === 'Running' ? false : true}
                   onClick={() => this.showModalStop()}
                 >
@@ -471,8 +524,8 @@ class StacksID extends React.Component<StackIdProps, StackIdState> {
                 isShowModal={this.state.isShowModalStop}
                 close={this.closeModalStop}
                 action={this.stop}
-                title={`Are you Sure you want to Stop ${capitalize(COMMON_ENTITY)}?`}
-                subTitle={`Are you sure you want to stop your ${COMMON_ENTITY}? All of your running services will be stop. This action can't be undone.`}
+                title={`Are you sure you want to stop ${capitalize(COMMON_ENTITY)}?`}
+                subTitle={`All of your running services will be stopped. This action can't be undone.`}
                 buttonText="Stop"
               />
             </Card>
@@ -500,7 +553,6 @@ class StacksID extends React.Component<StackIdProps, StackIdState> {
 
                 <Button
                   className="delete-stack-button"
-                  type="primary"
                   disabled={text === 'Running' || text === 'Stopped' ? false : true}
                   onClick={() => this.showModalDelete()}
                 >
@@ -514,7 +566,10 @@ class StacksID extends React.Component<StackIdProps, StackIdState> {
                 action={this.delete}
                 close={this.closeModalDelete}
                 title={`Are you Sure you want to Delete ${capitalize(COMMON_ENTITY)}?`}
-                subTitle={`Please type "${stack.name}" to confirm`}
+                subTitle={
+                  'All of your data will be deleted permanently. This action can not be undone.'
+                }
+                extraText={`Please type "${stack.name}" to confirm`}
                 buttonText="Delete"
               />
             </Card>
@@ -554,20 +609,24 @@ class StacksID extends React.Component<StackIdProps, StackIdState> {
         </Head>
         {organization.isTransferred && <OrganizationNotification />}
         <Breadcrumb className="breadcrumb">
-          <Link href={`/${organization.slug}/${Pluralize(COMMON_ENTITY)}`}>
+          <Breadcrumb.Item>
+            <Link href={`/${organization.slug}/${Pluralize(COMMON_ENTITY)}`}>
+              <a>
+                <span className="breadcrumb__inner">
+                  <img src="/home.svg" alt="home" />
+                </span>
+              </a>
+            </Link>
+          </Breadcrumb.Item>
+          <Breadcrumb.Item>
             <a>
-              <span className="breadcrumb__inner">
-                <img src="/home.svg" alt="home" />
-              </span>
+              <span className="breadcrumb__inner">{stack.name}</span>
             </a>
-          </Link>
-          <a>
-            <span className="breadcrumb__inner">{stack.name}</span>
-          </a>
+          </Breadcrumb.Item>
         </Breadcrumb>
 
         <div className="previous-screen">
-          <a onClick={() => router.back()}>
+          <a onClick={() => router.push(`/${organization.slug}/${Pluralize(COMMON_ENTITY)}`)}>
             <img src="/chevron-gray.svg" alt="back" /> Back
           </a>
         </div>

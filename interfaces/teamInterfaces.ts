@@ -1,10 +1,20 @@
 import { Paginate } from 'interfaces';
 import { UserInterface } from './userInterfaces';
 
-export interface Members {
+export interface Members extends UserInterface {
   _id: string;
-  userId: string;
-  role: string;
+  userId?: string;
+  role?: string;
+}
+
+export interface MemberResourceInterface {
+  createdAt: string;
+  firstName: string;
+  lastName: string;
+  organizationId: string;
+  teamId: string;
+  updatedAt: string;
+  userId: { _id: string; avatarUrl: string };
 }
 
 export interface TeamInterface {
@@ -17,7 +27,7 @@ export interface TeamInterface {
   stripeSubscriptionId?: string;
   isPaymentFailed?: string;
   stripeCustomerId?: string;
-  members?: Array<Members>;
+  members?: MemberResourceInterface[];
   description: string;
   name: string;
   slug: string;

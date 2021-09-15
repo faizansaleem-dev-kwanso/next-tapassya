@@ -25,7 +25,9 @@ export const validateStack = (data) =>
 
 export const searchStack = (params: GetProjectParams): Promise<ProjectResponseInterface> =>
   sendRequestAndGetResponse(
-    `${BASE_PATH}/search-projects/${params.organizationId}?search=${params.search}&page=${params.page}&limit=${params.limit}`,
+    `${BASE_PATH}/search-projects/${params.organizationId}?search=${encodeURIComponent(
+      params.search,
+    )}&page=${params.page}&limit=${params.limit}`,
     {
       method: 'GET',
     },

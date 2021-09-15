@@ -3,7 +3,6 @@ import router, { withRouter } from 'next/router';
 import { inject, observer } from 'mobx-react';
 import { Card, Col, Row, Button, Typography, Input, Badge, Pagination, Tooltip } from 'antd';
 import { SearchOutlined } from '@ant-design/icons';
-import { CopyFilled } from '@ant-design/icons';
 import NProgress from 'nprogress';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import Head from 'next/head';
@@ -25,8 +24,6 @@ import Pluralize from 'pluralize';
 import { capitalize } from 'lodash';
 import { PlansEntity } from 'interfaces/organizationInterfaces';
 import StacksModal from 'components/common/StacksModal';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faExternalLinkAlt } from '@fortawesome/free-solid-svg-icons';
 const { Title } = Typography;
 const pageSize: number = PAGE_SIZE;
 /**
@@ -66,7 +63,7 @@ const StackCard = (stack: ProjectCardInterface) => {
       <div className="campus-link">
         <Tooltip title="Visit Link">
           <a href={`https://${subDomain}.illumidesk.com`} target="_blank" rel="noopener noreferrer">
-            <FontAwesomeIcon icon={faExternalLinkAlt} />
+            <img src="/visit-link.svg" />
           </a>
         </Tooltip>
 
@@ -75,7 +72,7 @@ const StackCard = (stack: ProjectCardInterface) => {
             onCopy={() => setIsCopied()}
             text={`https://${subDomain}.illumidesk.com`}
           >
-            <CopyFilled />
+            <img src="/copy-link.svg" />
           </CopyToClipboard>
         </Tooltip>
       </div>
@@ -211,21 +208,22 @@ class Stacks extends React.Component<StacksProps, StacksState> {
     const { store } = this.props;
     const { searchStack, getAllStacks } = store.stackStore;
     const organization = store.currentOrganization;
-    this.setState({ search: event.target.value });
-    if (event.target.value.length >= 3) {
-      await searchStack({
-        organizationId: organization._id,
-        search: this.state.search,
-        page: 1,
-        limit: PAGE_SIZE,
-      });
-    } else {
-      await getAllStacks({
-        organizationId: organization._id,
-        page: 1,
-        limit: PAGE_SIZE,
-      });
-    }
+    this.setState({ search: event.target.value }, async () => {
+      if (this.state.search.length >= 3) {
+        await searchStack({
+          organizationId: organization._id,
+          search: this.state.search,
+          page: 1,
+          limit: PAGE_SIZE,
+        });
+      } else {
+        await getAllStacks({
+          organizationId: organization._id,
+          page: 1,
+          limit: PAGE_SIZE,
+        });
+      }
+    });
   };
   setIsCopied = (): void => {
     this.setState({ isCopy: !this.state.isCopy }, () => {
@@ -283,6 +281,7 @@ class Stacks extends React.Component<StacksProps, StacksState> {
             <div className="page-header">
               <div className="search-input">
                 <Title level={4}>{capitalize(Pluralize(COMMON_ENTITY))}</Title>
+
                 <Input
                   size="large"
                   placeholder="Search"
@@ -293,7 +292,7 @@ class Stacks extends React.Component<StacksProps, StacksState> {
               </div>
               ​
               <Button type="primary" className="btn-primary" onClick={this.handleShowModal}>
-                Create a New {COMMON_ENTITY}
+                Create a New {capitalize(COMMON_ENTITY)}
               </Button>
             </div>
             ​
@@ -324,7 +323,7 @@ class Stacks extends React.Component<StacksProps, StacksState> {
             </div>
             ​
             <Button type="primary" className="btn-primary" onClick={this.handleShowModal}>
-              Create a New {capitalize(COMMON_ENTITY)}
+              Create a New {COMMON_ENTITY}
             </Button>
           </div>
           ​
@@ -374,7 +373,7 @@ class Stacks extends React.Component<StacksProps, StacksState> {
   }
   public render() {
     const { store } = this.props;
-    const { currentUser, currentOrganization } = store;
+    const { currentUser, currentOrganization, stacks } = store;
     if (!currentUser) {
       return null;
     }
@@ -385,7 +384,7 @@ class Stacks extends React.Component<StacksProps, StacksState> {
           <meta name="description" content={`${capitalize(Pluralize(COMMON_ENTITY))}`} />
         </Head>
         {currentOrganization.isTransferred && <OrganizationNotification />}
-        {this.state.showModal && (
+        {this.state.showModal && stacks.length < 2 ? (
           <StacksModal
             isShowModal={this.state.showModal}
             close={() => this.setState({ showModal: false })}
@@ -393,6 +392,15 @@ class Stacks extends React.Component<StacksProps, StacksState> {
             title={`You need to upgrade to create ${COMMON_ENTITY}`}
             subTitle=""
             buttonText="Upgrade"
+          />
+        ) : (
+          <StacksModal
+            isShowModal={this.state.showModal}
+            close={() => this.setState({ showModal: false })}
+            action={() => router.push('https://support.illumidesk.com/hc/en-us')}
+            title={'To get customize Enterprise Plan please contact IllumiDesk Support'}
+            subTitle=""
+            buttonText="Contact Support"
           />
         )}
         <div>{this.renderCards()}</div>

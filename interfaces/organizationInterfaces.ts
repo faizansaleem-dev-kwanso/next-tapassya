@@ -1,4 +1,5 @@
 import { InviteInterface } from './inviteInterfaces';
+import { ProjectInterface } from './projectsInterface';
 import { TeamInterface } from './teamInterfaces';
 export interface OrganizationInterface {
   isDefaultOrganization: boolean;
@@ -10,6 +11,16 @@ export interface OrganizationInterface {
   createdAt: string;
   billingId: BillingId;
   updatedAt: string;
+}
+
+export interface ResourcesInterface {
+  id: string;
+  name: string;
+  billingId: BillingId;
+  isDefaultOrganization: boolean;
+  isTransferred: boolean;
+  projects: ProjectInterface[];
+  teams: TeamInterface[];
 }
 
 export interface PlansEntity {
@@ -60,6 +71,7 @@ export interface OrganizationResponse {
   organization?: OrganizationInterface;
   organizations?: OrganizationInterface[];
   team?: TeamInterface;
+  resources?: ResourcesInterface[];
 }
 
 export interface MemberDetails {

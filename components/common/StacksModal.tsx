@@ -15,10 +15,38 @@ const StacksModal: FC<StackModalInterface> = ({
   subTitle,
   buttonText,
   isShowModal,
+  extraText,
   close,
   action,
 }): JSX.Element => {
   const [value, setValue] = useState<string>('');
+  const buttonTexts = [
+    'Deactivate',
+    'Delete',
+    'Stop',
+    'Deploy',
+    'Upgrade',
+    'Contact Support',
+    `Delete ${capitalize(COMMON_ENTITY)}`,
+    'Deactivate',
+  ];
+  const disableCheck = () => {
+    switch (buttonText === 'Delete' && name === value) {
+      case true:
+        return false;
+      case false:
+        switch (buttonTexts.includes(buttonText) && buttonText !== 'Delete') {
+          case true:
+            return false;
+          case false:
+            return true;
+          default:
+            break;
+        }
+      default:
+        break;
+    }
+  };
   useEffect(() => {
     setValue('');
   }, [isShowModal]);
@@ -44,19 +72,11 @@ const StacksModal: FC<StackModalInterface> = ({
             key="link"
             type="primary"
             danger={
-              buttonText === 'Deactivate' || `Delete ${capitalize(COMMON_ENTITY)}` ? true : false
+              buttonText === 'Deactivate' || buttonText === 'Delete' || buttonText === 'Stop'
+                ? true
+                : false
             }
-            disabled={
-              buttonText === 'Delete' && value === name
-                ? false
-                : buttonText === 'Stop' ||
-                  buttonText === 'Deploy' ||
-                  buttonText === 'Upgrade' ||
-                  buttonText === `Delete ${capitalize(COMMON_ENTITY)}` ||
-                  buttonText === 'Deactivate'
-                ? false
-                : true
-            }
+            disabled={disableCheck()}
             onClick={() => {
               buttonText === 'Upgrade' ? action('setup') : action();
               close();
@@ -75,6 +95,9 @@ const StacksModal: FC<StackModalInterface> = ({
           <div>
             <Title level={5}>{title}</Title>
             <p>{subTitle}</p>
+            <div className="delete-modal-txt">
+              <p>{extraText}</p>
+            </div>
             {buttonText === 'Delete' && (
               <Input
                 placeholder="Type here"

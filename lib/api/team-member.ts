@@ -21,7 +21,9 @@ export const addMember = (data: AddMemberParams): Promise<TeamMemberResponse> =>
 
 export const searchTeamMember = (options: TeamMemberParamsInterface): Promise<TeamMemberResponse> =>
   sendRequestAndGetResponse(
-    `${BASE_PATH}/search-team-members/${options.teamId}?search=${options.search}&page=${options.page}&limit=${options.limit}`,
+    `${BASE_PATH}/search-team-members/${options.teamId}?search=${encodeURIComponent(
+      options.search,
+    )}&page=${options.page}&limit=${options.limit}`,
     {
       method: 'GET',
       ...options,

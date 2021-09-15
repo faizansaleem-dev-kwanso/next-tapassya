@@ -96,11 +96,11 @@ const DuplicateTeamModal: FC<DuplicateModalProps> = (props): JSX.Element => {
           </div>
 
           <div className="form-footer">
-            <Button type="text" className="btn-transparent ant-btn-margin" onClick={onCancel}>
+            <Button type="text" className="btn-outlined-cancel" onClick={onCancel}>
               Cancel
             </Button>
             <Button type="primary" htmlType="submit" className="btn-primary">
-              Duplicate
+              Duplicate Team
             </Button>
           </div>
         </Form>

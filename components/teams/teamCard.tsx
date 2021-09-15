@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 import React, { useState, FC } from 'react';
-import { Card, Popover, Button } from 'antd';
+import { Card, Popover, Button, Avatar } from 'antd';
 import { EllipsisOutlined } from '@ant-design/icons';
 import '../../styles/Teams.module.less';
 import { TeamCardProps } from '../../interfaces/index';
@@ -9,6 +9,7 @@ import EditModal from './newTeamModal';
 import DuplicateModal from './duplicateTeamModal';
 import { observer, inject } from 'mobx-react';
 import Link from 'next/link';
+import { UserOutlined } from '@ant-design/icons';
 
 /**
  * This renders team cards with their respective details
@@ -24,7 +25,9 @@ const TeamCard: FC<TeamCardProps> = (props): JSX.Element => {
     memberDetailView,
     teamId,
     defaultTeam,
+    resourceView,
     store,
+    avatarUrls,
     initialState,
   } = props;
   const { setCurrentTeam, currentOrganization } = store;
@@ -76,14 +79,12 @@ const TeamCard: FC<TeamCardProps> = (props): JSX.Element => {
 
   return (
     <Card className="team-card" onClick={handleClick}>
-      <Link href={`/${currentOrganization.slug}/team/${slug}`}>
+      {window.location.href.includes('resources') ? (
         <div className="link-url-grid">
           <div className="d-flex-team">
-            <Link href={`/${currentOrganization.slug}/team/${slug}`}>
-              <Button type="link">
-                <h5>{title}</h5>
-              </Button>
-            </Link>
+            <Button type="link">
+              <h5>{title}</h5>
+            </Button>
 
             {defaultTeam ? <div className="default-badge">Default</div> : ''}
           </div>
@@ -101,10 +102,37 @@ const TeamCard: FC<TeamCardProps> = (props): JSX.Element => {
             </>
           )}
         </div>
-      </Link>
+      ) : (
+        <Link href={`/${currentOrganization.slug}/team/${slug}`}>
+          <div className="link-url-grid">
+            <div className="d-flex-team">
+              <Link href={`/${currentOrganization.slug}/team/${slug}`}>
+                <Button type="link">
+                  <h5>{title}</h5>
+                </Button>
+              </Link>
+
+              {defaultTeam ? <div className="default-badge">Default</div> : ''}
+            </div>
+            {window.location.href.includes('user-details') ? (
+              <>
+                <p>
+                  {content && content.substring(0, 50)} {content && content.length > 50 && '...'}
+                </p>
+              </>
+            ) : (
+              <>
+                <p>
+                  {content && content.substring(0, 80)} {content && content.length > 80 && '...'}
+                </p>
+              </>
+            )}
+          </div>
+        </Link>
+      )}
 
       <div className="card-actions">
-        {!memberDetailView && (
+        {!memberDetailView && !window.location.href.includes('resources') && (
           <Popover
             content={memberView !== true ? PopOverContent : MemberViewPopOverContent}
             trigger="click"
@@ -115,6 +143,15 @@ const TeamCard: FC<TeamCardProps> = (props): JSX.Element => {
           >
             <EllipsisOutlined key="ellipsis" />
           </Popover>
+        )}
+        {resourceView && (
+          <div className="card-actions-resource">
+            <Avatar.Group maxCount={3}>
+              {avatarUrls.map((url, index) => (
+                <Avatar key={index} icon={url !== '' ? <img src={url} /> : <UserOutlined />} />
+              ))}
+            </Avatar.Group>
+          </div>
         )}
       </div>
     </Card>

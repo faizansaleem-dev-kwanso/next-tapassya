@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import React, { FC, useState } from 'react';
+import React, { FC, useState, useEffect } from 'react';
 import { inject, observer } from 'mobx-react';
 import '../../styles/Teams.module.less';
 import { Modal, Button, Input } from 'antd';
@@ -24,6 +24,10 @@ const DeleteOrganizationModal: FC<DeleteOrganizationModalProps> = (props): JSX.E
   // States
   const [visibility, setVisibility] = useState<boolean>(false);
   const [input, setInput] = useState<string>();
+
+  useEffect(() => {
+    setInput('');
+  }, [visibility]);
 
   // This function opens or closes modal
   const changeVisibility = (): void => {
@@ -67,13 +71,13 @@ const DeleteOrganizationModal: FC<DeleteOrganizationModalProps> = (props): JSX.E
           <div className="modal-body">
             <h4>Are you Sure you want to Delete Organization?</h4>
             <p>
-              Are you sure you want to delete this organization? All data of this organization will
-              also be deleted.
+              Are you sure you want to Delete your Organization? All of your saved data will be
+              lost.
             </p>
             <hr></hr>
-            <div>
+            <div className="delete-modal-txt">
               <p>Please type "{currentOrganization.name}" to confirm</p>
-              <Input onChange={(e) => setInput(e.target.value)}></Input>
+              <Input onChange={(e) => setInput(e.target.value)} value={input}></Input>
             </div>
             <hr></hr>
           </div>
@@ -90,7 +94,7 @@ const DeleteOrganizationModal: FC<DeleteOrganizationModalProps> = (props): JSX.E
             disabled={input === currentOrganization.name ? false : true}
             onClick={() => handleDelete()}
           >
-            Delete
+            Delete Organization
           </Button>
         </div>
       </Modal>

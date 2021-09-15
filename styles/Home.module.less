@@ -39,8 +39,8 @@
   }
 
   @media only screen and (max-width: 991px) {
-    background-position: 0px 80px;
-    background-size: 100% 100%;
+    background-position: 0px 90px;
+    background-size: 95% 90%;
     min-height: calc(100vh - 175px);
   }
 
@@ -54,9 +54,14 @@
 
   .ant-btn.ant-btn-primary{
     min-width: 195px;
+
+    @media only screen and (max-width: 767px) {
+      font-size: 12px;
+      min-width: 101px;
+    }
   }
 
-  h2 {
+  h2.ant-typography {
     font-weight: 600;
     font-size: 24px;
     line-height: 30px;
@@ -83,6 +88,7 @@
     @media only screen and (max-width: 414px) {
       font-size: 14px;
       line-height: 20px;
+      margin-bottom: 20px;
     }
   }
 }

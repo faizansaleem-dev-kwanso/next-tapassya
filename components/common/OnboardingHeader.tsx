@@ -1,4 +1,4 @@
-import { withRouter } from 'next/router';
+import router, { withRouter } from 'next/router';
 import React from 'react';
 import { Avatar, Button, Dropdown, Layout, Menu } from 'antd';
 import { observer } from 'mobx-react';
@@ -29,6 +29,12 @@ class LayoutComponent extends React.Component<OnboardingHeaderProps> {
 
   // This method loads the widget scripts when component is mounted
   public componentDidMount() {
+    const { store } = this.props;
+    const { currentUser } = store;
+    if (!currentUser.isActive) {
+      router.push('/account-deactivated');
+    }
+
     (function (w, d, i) {
       function l() {
         if (!d.getElementById(i)) {
@@ -96,8 +102,10 @@ class LayoutComponent extends React.Component<OnboardingHeaderProps> {
       <>
         <Header className="site-layout-background">
           {currentOrganization &&
+          currentOrganization.billingId.isCard &&
           typeof window !== 'undefined' &&
           window.location.pathname !== `/${currentOrganization.slug}/setup-complete` &&
+          !window.location.pathname.includes('disclaimer') &&
           window.location.pathname !== `/${currentOrganization.slug}/start-trial`
             ? React.createElement(this.state.collapsed ? MenuUnfoldOutlined : MenuFoldOutlined, {
                 className: 'trigger',

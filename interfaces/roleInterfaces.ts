@@ -10,7 +10,7 @@ export interface RoleResponseInterface {
   message: string;
   isAdmin?: boolean;
   isOrganization?: boolean;
-  isInstructor?: boolean;
+  isMember?: boolean;
   roles?: RoleInterface[];
 }
 

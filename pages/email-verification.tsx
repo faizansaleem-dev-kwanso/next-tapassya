@@ -1,5 +1,6 @@
 import { Button } from 'antd';
 import * as React from 'react';
+import Head from 'next/head';
 import { inject, observer } from 'mobx-react';
 import { withAuth } from '../lib/auth';
 import { checkEmailVerification } from '../lib/api/public';
@@ -7,6 +8,7 @@ import notify from '../lib/notifier';
 import '../styles/Stacks.module.less';
 import '../styles/Layout.module.less';
 import OnboardingHeader from 'components/common/OnboardingHeader';
+import { GetServerSideProps } from 'next';
 
 const continueToDashboard = async () => {
   const res = await checkEmailVerification();
@@ -27,6 +29,10 @@ const continueToDashboard = async () => {
 const EmailVerify = (props): JSX.Element => {
   return (
     <OnboardingHeader {...props}>
+      <Head>
+        <title>Email Verification</title>
+        <meta name="description" content="Email Verification" />
+      </Head>
       <div className="onboarding-wrapper">
         <div className="onboaridng-layout-graphic">
           <h3>A few clicks away from creating your illumiDesk Account</h3>
@@ -53,7 +59,7 @@ const EmailVerify = (props): JSX.Element => {
   );
 };
 
-export const getServerSideProps = withAuth(null, {
+export const getServerSideProps: GetServerSideProps = withAuth(null, {
   dontRedirect: true,
   onVerificationPage: true,
 });

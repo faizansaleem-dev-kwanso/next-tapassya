@@ -3,6 +3,7 @@ import { TransferVerificationProps } from 'interfaces';
 import { acceptTransferOrg } from 'lib/api/organization';
 import { URL_API, COMMON_ENTITY } from 'lib/consts';
 import notify from 'lib/notifier';
+import { GetServerSideProps, GetServerSidePropsContext } from 'next';
 import Head from 'next/head';
 import { withRouter } from 'next/router';
 import Pluralize from 'pluralize';
@@ -61,13 +62,9 @@ const TransferVerification: FC<TransferVerificationProps> = (props): JSX.Element
   );
 };
 
-export const getServerSideProps = async (context: {
-  query: { token: string };
-}): Promise<{
-  props: {
-    token: any;
-  };
-}> => {
+export const getServerSideProps: GetServerSideProps = async (
+  context: GetServerSidePropsContext,
+) => {
   return {
     props: {
       token: context.query.token ? context.query.token : '',

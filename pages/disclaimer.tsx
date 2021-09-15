@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
 import React, { FC } from 'react';
 import OnboardingHeader from 'components/common/OnboardingHeader';
-import { DisclaimerProps } from 'interfaces';
+import { DataServerSideProps, DisclaimerProps } from 'interfaces';
 import Head from 'next/head';
 import { withAuth } from 'lib/auth';
 import { inject, observer } from 'mobx-react';
@@ -10,9 +10,9 @@ import notify from 'lib/notifier';
 import { loadStripe } from '@stripe/stripe-js';
 import { STRIPEPUBLISHABLEKEY } from 'lib/consts';
 import { fetchCheckoutSession } from 'lib/api/team-leader';
+import { GetServerSideProps, GetServerSidePropsContext } from 'next';
 
 const Disclaimer: FC<DisclaimerProps> = (props): JSX.Element => {
-  console.log(STRIPEPUBLISHABLEKEY, '<<<<<STRIPE KEY');
   const stripePromise = loadStripe(STRIPEPUBLISHABLEKEY);
   const { store, planId, planName } = props;
   const { currentOrganization } = store;
@@ -53,7 +53,7 @@ const Disclaimer: FC<DisclaimerProps> = (props): JSX.Element => {
               Payment Information is required in order to proceed. We won't deduct any amount on
               Free Plan
             </p>
-            <Button type="primary" onClick={handleBilling}>
+            <Button style={{ backgroundColor: '#417837' }} type="primary" onClick={handleBilling}>
               Continue
             </Button>
           </div>
@@ -63,8 +63,8 @@ const Disclaimer: FC<DisclaimerProps> = (props): JSX.Element => {
   );
 };
 
-export const getServerSideProps = withAuth(
-  async (data, context) => {
+export const getServerSideProps: GetServerSideProps = withAuth(
+  async (data: DataServerSideProps, context: GetServerSidePropsContext) => {
     return {
       ...data,
       props: {

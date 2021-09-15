@@ -32,6 +32,7 @@ import { isUserAdmin } from 'lib/api/role';
 import { InviteInterface } from 'interfaces/inviteInterfaces';
 import OrganizationNotification from 'components/common/OrganizationNotification';
 import Pluralize from 'pluralize';
+import { GetServerSideProps } from 'next';
 
 const { Panel } = Collapse;
 const { Title } = Typography;
@@ -52,7 +53,7 @@ const OrganizationSettings: React.FC<TeamPageProps> = (props): JSX.Element => {
   const [card, setCard] = useState<CardInterface>();
   const [loading, setLoading] = useState<boolean>(true);
   const [isAdmin, setIsAdmin] = useState<boolean>(false);
-  const [isInstructor, setIsInstructor] = useState<boolean>(false);
+  const [isMember, setIsMember] = useState<boolean>(false);
   const [isTransferred, setIsTransferred] = useState<boolean>(false);
   const [transferInviation, setTransferInvitation] = useState<Partial<InviteInterface>>({});
 
@@ -100,7 +101,7 @@ const OrganizationSettings: React.FC<TeamPageProps> = (props): JSX.Element => {
     const response = await isUserAdmin();
     if (response.status === 200) {
       setIsAdmin(response.isAdmin);
-      setIsInstructor(response.isInstructor);
+      setIsMember(response.isMember);
     } else {
       setIsAdmin(false);
     }
@@ -142,11 +143,11 @@ const OrganizationSettings: React.FC<TeamPageProps> = (props): JSX.Element => {
   useEffect(() => {
     if (
       (isAdmin && currentOrganization.ownerId === currentUser._id) ||
-      (isInstructor && currentOrganization.ownerId === currentUser._id)
+      (isMember && currentOrganization.ownerId === currentUser._id)
     ) {
       getCardDetails();
     }
-  }, [isAdmin, isInstructor]);
+  }, [isAdmin, isMember]);
 
   return (
     <Layout {...props}>
@@ -155,16 +156,20 @@ const OrganizationSettings: React.FC<TeamPageProps> = (props): JSX.Element => {
         <meta name="description" content="Organization Settings" />
       </Head>
       <Breadcrumb className="breadcrumb">
-        <Link href={`/${currentOrganization.slug}/${Pluralize(COMMON_ENTITY)}`}>
+        <Breadcrumb.Item>
+          <Link href={`/${currentOrganization.slug}/${Pluralize(COMMON_ENTITY)}`}>
+            <a>
+              <span className="breadcrumb__inner">
+                <img src="/home.svg" alt="home" />
+              </span>
+            </a>
+          </Link>
+        </Breadcrumb.Item>
+        <Breadcrumb.Item>
           <a>
-            <span className="breadcrumb__inner">
-              <img src="/home.svg" alt="home" />
-            </span>
+            <span className="breadcrumb__inner">Settings</span>
           </a>
-        </Link>
-        <a>
-          <span className="breadcrumb__inner">Settings</span>
-        </a>
+        </Breadcrumb.Item>
       </Breadcrumb>
       {currentOrganization.isTransferred && <OrganizationNotification />}
 
@@ -176,7 +181,7 @@ const OrganizationSettings: React.FC<TeamPageProps> = (props): JSX.Element => {
         <Row gutter={40}>
           <Col span={17} xl={17} lg={24} md={24} sm={24} xs={24}>
             {((isAdmin && currentOrganization.ownerId === currentUser._id) ||
-              (isInstructor && currentOrganization.ownerId === currentUser._id)) && (
+              (isMember && currentOrganization.ownerId === currentUser._id)) && (
               <>
                 <div>
                   <Collapse accordion>
@@ -294,32 +299,43 @@ const OrganizationSettings: React.FC<TeamPageProps> = (props): JSX.Element => {
               </Collapse>
             </div>
             {((isAdmin && currentOrganization.ownerId === currentUser._id) ||
-              (isInstructor && currentOrganization.ownerId === currentUser._id)) && (
+              (isMember && currentOrganization.ownerId === currentUser._id)) && (
               <Card className="stacks-card-services organization-actions">
-                <div className="danger-zone">
-                  <div className="icon-avatar">
-                    <img src="/caution.svg" alt="caution" />
-                  </div>
-                  <Title level={5} type="danger">
-                    Danger Zone
-                  </Title>
-                </div>
+                <div className="d-flex-organization">
+                  <div style={{ width: '100%' }}>
+                    <div className="danger-zone">
+                      <div className="icon-avatar">
+                        <img src="/caution.svg" alt="caution" />
+                      </div>
+                      <Title level={5} type="danger">
+                        Danger Zone
+                      </Title>
+                    </div>
 
-                <h5>Delete Organization</h5>
-                {currentOrganization.isDefaultOrganization ? (
-                  <p>This is default organization. You cannot delete default organization</p>
-                ) : (
-                  <p>
-                    Are you sure you want to delete organization? By deleting this you will lose all
-                    your organization data.
-                  </p>
-                )}
-                <DeleteOrganizationModal />
+                    <div className="d-flex-delete">
+                      <div>
+                        <h5>Delete Organization?</h5>
+                        {currentOrganization.isDefaultOrganization ? (
+                          <p>
+                            This is default organization. You cannot delete default organization
+                          </p>
+                        ) : (
+                          <p>
+                            Are you sure you want to delete organization? By deleting this you will
+                            lose all your organization data.
+                          </p>
+                        )}
+                      </div>
+
+                      <DeleteOrganizationModal />
+                    </div>
+                  </div>
+                </div>
               </Card>
             )}
           </Col>
           {((isAdmin && currentOrganization.ownerId === currentUser._id) ||
-            (isInstructor && currentOrganization.ownerId === currentUser._id)) && (
+            (isMember && currentOrganization.ownerId === currentUser._id)) && (
             <Col span={7} xl={7} lg={24} md={24} sm={24} xs={24}>
               <div className="billing-details">
                 <div className="billing-header">
@@ -342,5 +358,5 @@ const OrganizationSettings: React.FC<TeamPageProps> = (props): JSX.Element => {
   );
 };
 
-export const getServerSideProps = withAuth(null, { dontRedirect: true });
+export const getServerSideProps: GetServerSideProps = withAuth(null, { dontRedirect: true });
 export default withRouter<TeamPageProps>(inject('store')(observer(OrganizationSettings)));

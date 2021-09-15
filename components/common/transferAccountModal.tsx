@@ -7,7 +7,7 @@ import notify from 'lib/notifier';
 import { inject, observer } from 'mobx-react';
 
 const TransferAccountModal: FC<TransferAccountModalProps> = (props): JSX.Element => {
-  const { store } = props;
+  const { store, organizationId } = props;
   const { currentOrganization, organizationStore } = store;
   const { transferOrganization } = organizationStore;
   const [visibility, setVisibility] = useState<boolean>(false);
@@ -39,7 +39,7 @@ const TransferAccountModal: FC<TransferAccountModalProps> = (props): JSX.Element
     setLoading(!loading);
     const response = await transferOrganization({
       email: formValues.email,
-      organizationId: currentOrganization._id,
+      organizationId: organizationId ? organizationId : currentOrganization._id,
       type: 'TRANSFER-ORGANIZATION',
     });
     if (response.status === 200) {
@@ -47,6 +47,7 @@ const TransferAccountModal: FC<TransferAccountModalProps> = (props): JSX.Element
       form.resetFields();
       setLoading(!loading);
       props.setIsTransferred(true);
+      changeVisibility();
     } else {
       setLoading(false);
       form.resetFields();
@@ -119,7 +120,7 @@ const TransferAccountModal: FC<TransferAccountModalProps> = (props): JSX.Element
                   disabled={disabled}
                   loading={loading}
                 >
-                  Transfer Account
+                  Transfer Organization
                 </Button>
               </div>
             </Form>

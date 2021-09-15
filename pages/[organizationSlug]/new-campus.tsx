@@ -11,6 +11,7 @@ import {
   Select,
   Tag,
   Breadcrumb,
+  Tooltip,
 } from 'antd';
 import { inject, observer } from 'mobx-react';
 import * as ProjectNameGenerator from 'project-name-generator';
@@ -31,7 +32,6 @@ import {
   AuthDetailInterface,
   NewProjectState,
   NewProjectProps,
-  ProjectResponseInterface,
 } from 'interfaces/projectsInterface';
 import OrganizationNotification from 'components/common/OrganizationNotification';
 import Pluralize from 'pluralize';
@@ -55,6 +55,7 @@ class NewStack extends React.Component<NewProjectProps, NewProjectState> {
   constructor(props: NewProjectProps) {
     super(props);
     const prefillName = ProjectNameGenerator({ number: true }).dashed;
+    const { store, router } = props;
     this.state = {
       currentStep: 0,
       selectOpen: false,
@@ -68,39 +69,40 @@ class NewStack extends React.Component<NewProjectProps, NewProjectState> {
       authDetail: {},
       newStackId: null,
     };
-    const { store, router } = props;
+
     if (!store.currentTeam) {
       store.setCurrentTeam(router.query.organizationSlug);
     }
   }
 
-  componentDidMount() {
+  async componentDidMount() {
     const { store } = this.props;
-    const { teamStore } = store;
+    const { teamStore, teams } = store;
     const { getOrganizationTeams } = teamStore;
-    getOrganizationTeams();
+    await getOrganizationTeams();
+    this.setState({ teams: [teams[0].name] });
   }
 
   // This function handles form submission of first step
-  public onSubmitStep1 = async () => {
+  public onSubmitStep1 = async (data: {}) => {
     try {
       // Constants
       const { store } = this.props;
-      const { currentUser } = store;
-      const organization = store.currentOrganization;
+      const { currentUser, currentOrganization, teams } = store;
 
       // Business Logic
       this.setState({ disabled: true });
       const validation = await validateStack({
-        organizationId: organization._id,
+        ...data,
+        organizationId: currentOrganization._id,
         userId: currentUser._id,
       });
       if (validation.error) {
         this.setState({ errors: validation.error.errors });
       } else {
         this.setState({
-          currentStep: 1,
-          teams: [],
+          currentStep: teams.length === 1 && this.state.defaultAuth === 'generic' ? 3 : 1,
+          teams: [teams[0].name],
         });
       }
     } catch (error) {
@@ -116,23 +118,22 @@ class NewStack extends React.Component<NewProjectProps, NewProjectState> {
     try {
       // Constants
       const { store } = this.props;
-      const { currentUser, currentOrganization } = store;
-      const plan = currentOrganization.billingId.planName;
-      const organization = store.currentOrganization;
+      const { currentUser, currentOrganization, teams } = store;
 
       // Business Logic
       this.setState({ disabled: true });
       const validation = await validateStack({
         ...values,
-        organizationId: organization._id,
+        organizationId: currentOrganization._id,
         userId: currentUser._id,
       });
       if (validation.error) {
         this.setState({ errors: validation.error.errors });
       } else {
         this.setState({
-          currentStep: plan === 'Pro' ? 3 : 2,
+          currentStep: teams.length === 1 ? 3 : 2,
           authDetail: values,
+          teams: [teams[0].name],
         });
       }
     } catch (error) {
@@ -173,7 +174,7 @@ class NewStack extends React.Component<NewProjectProps, NewProjectState> {
       if (Object.entries(this.state.authDetail).length !== 0) {
         payload[this.state.defaultAuth] = this.state.authDetail;
       }
-      const response: ProjectResponseInterface = await addStack(payload);
+      const response = await addStack(payload);
       if (response.status === 200) {
         try {
           await actionOnStack(response.project._id, 'deploy');
@@ -181,7 +182,7 @@ class NewStack extends React.Component<NewProjectProps, NewProjectState> {
         } catch (error) {
           console.log(error);
         }
-        this.setState({ currentStep: 2, newStackId: response.project._id });
+        this.setState({ newStackId: response.project._id });
         this.goToProject();
       } else {
         notify(response.message, 'error');
@@ -380,7 +381,7 @@ class NewStack extends React.Component<NewProjectProps, NewProjectState> {
                             },
                           ]}
                         >
-                          <Input required={true} />
+                          <Input required={true} maxLength={256} />
                         </Form.Item>
                         <Form.Item
                           label="Shared Secret"
@@ -704,7 +705,9 @@ class NewStack extends React.Component<NewProjectProps, NewProjectState> {
 
                 <div className="right-grid">
                   {this.state.teams.map((team, index) => (
-                    <Tag key={index}>{team} </Tag>
+                    <Tooltip key={index} title={team}>
+                      <Tag key={index}>{team} </Tag>
+                    </Tooltip>
                   ))}
                 </div>
               </div>
@@ -724,8 +727,15 @@ class NewStack extends React.Component<NewProjectProps, NewProjectState> {
                     className="ant-btn-margin btn-primary"
                     onClick={() => {
                       this.setState({
-                        currentStep: this.state.defaultAuth === 'generic' ? 1 : 2,
-                        teams: [],
+                        currentStep:
+                          this.state.defaultAuth === 'generic'
+                            ? teams.length === 1
+                              ? 0
+                              : 1
+                            : teams.length === 1
+                            ? 1
+                            : 2,
+                        teams: [teams[0].name],
                       });
                     }}
                     disabled={currentStep === 3 ? false : true}
@@ -738,6 +748,7 @@ class NewStack extends React.Component<NewProjectProps, NewProjectState> {
                     htmlType="submit"
                     className="btn-primary"
                     disabled={this.state.disabled}
+                    loading={this.state.disabled}
                   >
                     Deploy
                   </Button>
@@ -753,7 +764,7 @@ class NewStack extends React.Component<NewProjectProps, NewProjectState> {
 
   public render() {
     // Constants
-    const { currentOrganization } = this.props.store;
+    const { currentOrganization, teams } = this.props.store;
 
     // Business Logic
     return (
@@ -763,21 +774,20 @@ class NewStack extends React.Component<NewProjectProps, NewProjectState> {
           <meta name="description" content={`Create a new ${capitalize(COMMON_ENTITY)}`} />
         </Head>
         <Breadcrumb className="breadcrumb">
-          <Link href={`/${currentOrganization.slug}/${Pluralize(COMMON_ENTITY)}`}>
+          <Breadcrumb.Item>
+            <Link href={`/${currentOrganization.slug}/${Pluralize(COMMON_ENTITY)}`}>
+              <a>
+                <span className="breadcrumb__inner">
+                  <img src="/home.svg" alt="home" />
+                </span>
+              </a>
+            </Link>
+          </Breadcrumb.Item>
+          <Breadcrumb.Item>
             <a>
-              <span className="breadcrumb__inner">
-                <img src="/home.svg" alt="home" />
-              </span>
+              <span className="breadcrumb__inner">Create a New {capitalize(COMMON_ENTITY)}</span>
             </a>
-          </Link>
-          <Link href={`/${currentOrganization.slug}/${Pluralize(COMMON_ENTITY)}`}>
-            <a>
-              <span className="breadcrumb__inner">{capitalize(COMMON_ENTITY)}</span>
-            </a>
-          </Link>
-          <a>
-            <span className="breadcrumb__inner">Create a New {capitalize(COMMON_ENTITY)}</span>
-          </a>
+          </Breadcrumb.Item>
         </Breadcrumb>
 
         {currentOrganization.isTransferred && <OrganizationNotification />}
@@ -791,7 +801,7 @@ class NewStack extends React.Component<NewProjectProps, NewProjectState> {
               <Steps size="small" current={this.state.currentStep.valueOf()} direction="vertical">
                 <Steps.Step title={`${capitalize(COMMON_ENTITY)} Details`} />
                 {this.state.defaultAuth !== 'generic' && <Steps.Step title="Add Version Details" />}
-                <Steps.Step title="Add Multiple Teams" />
+                {teams.length > 1 && <Steps.Step title="Add Multiple Teams" />}
                 <Steps.Step title="Preview" />
               </Steps>
             </Col>

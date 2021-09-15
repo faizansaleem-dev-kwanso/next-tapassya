@@ -16,6 +16,7 @@ class User {
   public email: string | null;
   public firstName: string | null;
   public lastName: string | null;
+  public isActive: boolean;
   public avatarUrl: string | null;
   public defaultTeamSlug: string;
   public userRoles: IObservableArray<Roles> = observable([]);
@@ -36,6 +37,7 @@ class User {
     this.defaultTeamSlug = params.defaultTeamSlug;
     this.darkTheme = !!params.darkTheme;
     this.isLoggedIn = !!params.isLoggedIn;
+    this.isActive = params.isActive;
   }
 
   /**

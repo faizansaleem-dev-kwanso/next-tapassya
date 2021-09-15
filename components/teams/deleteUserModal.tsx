@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import React, { FC, useState } from 'react';
+import React, { FC, useState, useEffect } from 'react';
 import { withRouter } from 'next/router';
 import { inject, observer } from 'mobx-react';
 import '../../styles/Teams.module.less';
@@ -23,6 +23,10 @@ const DeleteModal: FC<DeleteModalProps> = (props): JSX.Element => {
   // States
   const [visibility, setVisibility] = useState<boolean>(false);
   const [input, setInput] = useState<string>();
+
+  useEffect(() => {
+    setInput('');
+  }, [visibility]);
 
   // This opens or closes modal
   const changeVisibility = (): void => {
@@ -136,9 +140,9 @@ const DeleteModal: FC<DeleteModalProps> = (props): JSX.Element => {
             </p>
             <hr></hr>
             {team && (
-              <div>
+              <div className="delete-modal-txt">
                 <p>Please type "{currentTeam.name}" to confirm</p>
-                <Input onChange={(e) => setInput(e.target.value)}></Input>
+                <Input onChange={(e) => setInput(e.target.value)} value={input}></Input>
                 <hr></hr>
               </div>
             )}

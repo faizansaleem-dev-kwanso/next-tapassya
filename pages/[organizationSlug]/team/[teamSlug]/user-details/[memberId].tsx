@@ -191,14 +191,10 @@ const Test: FC<TeamPageProps> = (props): JSX.Element => {
                 ))}
               </Select>
             </Form.Item>
-            {roles.length !== 0 ? (
-              <Button htmlType="submit">
-                Add Role
-                <img src="/dropdown-arrow.svg" alt="arrow" />
-              </Button>
-            ) : (
-              ''
-            )}
+
+            <Button htmlType="submit" type="primary" disabled={roles.length !== 0 ? false : true}>
+              Add Role
+            </Button>
           </Form>
           <RoleTable deleteRole={deleteRole} data={tableData}></RoleTable>
         </div>
@@ -266,7 +262,7 @@ const Test: FC<TeamPageProps> = (props): JSX.Element => {
     const { totalDocs, limit, pagingCounter, page } = stackStore.paginate;
     return (
       <div className="teams-data">
-        <h3>{capitalize(COMMON_ENTITY)}</h3>
+        <h3>{Pluralize(capitalize(COMMON_ENTITY))}</h3>
         <div className="d-flex-teams">
           {isLoadingProjects && (
             <Row gutter={15}>
@@ -282,7 +278,9 @@ const Test: FC<TeamPageProps> = (props): JSX.Element => {
           {!isLoadingTeams && stacks.length === 0 && (
             <div className="not-found-data">
               <NoResult
-                subText={`User not added to any ${COMMON_ENTITY}`}
+                subText={`This member is not added into any ${capitalize(
+                  COMMON_ENTITY,
+                )} right now!`}
                 text={`No ${capitalize(COMMON_ENTITY)} Found`}
               />
             </div>
@@ -297,7 +295,7 @@ const Test: FC<TeamPageProps> = (props): JSX.Element => {
                   subDomain={stack.subDomain}
                   actions={stack.actions}
                   stage={stack.stage}
-                  setIsCopied={(): void => {}}
+                  setIsCopied={() => {}}
                   isCopy={false}
                 />
               ))}
@@ -361,28 +359,36 @@ const Test: FC<TeamPageProps> = (props): JSX.Element => {
       </Head>
       {currentOrganization.isTransferred && <OrganizationNotification />}
       <Breadcrumb className="breadcrumb">
-        <Link href={`/${currentOrganization.slug}/${Pluralize(COMMON_ENTITY)}`}>
+        <Breadcrumb.Item>
+          <Link href={`/${currentOrganization.slug}/${Pluralize(COMMON_ENTITY)}`}>
+            <a>
+              <span className="breadcrumb__inner">
+                <img src="/home.svg" alt="home" />
+              </span>
+            </a>
+          </Link>
+        </Breadcrumb.Item>
+        <Breadcrumb.Item>
+          <Link href={`/${currentOrganization.slug}/team`}>
+            <a>
+              <span className="breadcrumb__inner">Teams</span>
+            </a>
+          </Link>
+        </Breadcrumb.Item>
+        <Breadcrumb.Item>
+          <Link href={`/${currentOrganization.slug}/team/${currentTeam.slug}`}>
+            <a>
+              <span className="breadcrumb__inner">{initialState.selectedTeam.team.name}</span>
+            </a>
+          </Link>
+        </Breadcrumb.Item>
+        <Breadcrumb.Item>
           <a>
             <span className="breadcrumb__inner">
-              <img src="/home.svg" alt="home" />
+              {userDetails.firstName} {userDetails.lastName}
             </span>
           </a>
-        </Link>
-        <Link href={`/${currentOrganization.slug}/team`}>
-          <a>
-            <span className="breadcrumb__inner">Teams</span>
-          </a>
-        </Link>
-        <Link href={`/${currentOrganization.slug}/team/${currentTeam.slug}`}>
-          <a>
-            <span className="breadcrumb__inner">{initialState.selectedTeam.team.name}</span>
-          </a>
-        </Link>
-        <a>
-          <span className="breadcrumb__inner">
-            {userDetails.firstName} {userDetails.lastName}
-          </span>
-        </a>
+        </Breadcrumb.Item>
       </Breadcrumb>
 
       <div className="profile-info">

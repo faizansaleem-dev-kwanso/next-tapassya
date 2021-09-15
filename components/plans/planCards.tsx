@@ -1,43 +1,50 @@
 /* eslint-disable react/prop-types */
 import React, { FC } from 'react';
 import { Card, Button, Tag } from 'antd';
-import { fetchCheckoutSession } from 'lib/api/team-leader';
-import { loadStripe } from '@stripe/stripe-js';
-import { STRIPEPUBLISHABLEKEY } from 'lib/consts';
-import notify from 'lib/notifier';
 import '../../styles/Plans.module.less';
 import { inject, observer } from 'mobx-react';
 import { PlanCardProps } from 'interfaces';
 import router from 'next/router';
+import { PlansEntity } from 'interfaces/organizationInterfaces';
+import { handleBilling } from 'lib/handleBilling';
 
 const PlanCards: FC<PlanCardProps> = (props): JSX.Element => {
   // Constants
-  const stripePromise = loadStripe(STRIPEPUBLISHABLEKEY);
   const { store } = props;
   const { currentOrganization, plans } = store;
+  const currentPlanName = currentOrganization.billingId.planName;
 
-  const handleBilling = async (id: string, planName: string): Promise<void> => {
-    if (planName === 'Free') {
-      router.push({
-        pathname: '/disclaimer',
-        query: { planId: id, planName: planName },
-      });
-    } else {
-      const { sessionId } = await fetchCheckoutSession({
-        mode: currentOrganization.billingId.isCard ? 'subscription' : 'setup',
-        billingId: currentOrganization.billingId._id,
-        planId: id,
-        planName: planName,
-        returnUrl: `${window.location.origin}/plans`,
-      });
-
-      const stripe = await stripePromise;
-      const { error } = await stripe.redirectToCheckout({ sessionId });
-
-      if (error) {
-        notify(error, 'error');
-        console.error(error);
+  const handleClick = (plan: PlansEntity) => {
+    let currentPlan: PlansEntity;
+    plans.forEach((item) => {
+      if (item.nickname === currentPlanName) {
+        currentPlan = item;
       }
+    });
+    if (currentPlanName) {
+      if (currentPlan.metadata.Conditional_Campus < plan.metadata.Conditional_Campus) {
+        handleBilling(
+          currentOrganization,
+          plan.id,
+          plan.nickname,
+          `${window.location.origin}/plans`,
+        );
+      } else {
+        router.push({
+          pathname: 'review-downgrade',
+          query: {
+            planId: plan.id,
+          },
+        });
+      }
+    } else {
+      handleBilling(
+        currentOrganization,
+        plan.id,
+        plan.nickname,
+        `${window.location.origin}/plans`,
+        true,
+      );
     }
   };
 
@@ -53,11 +60,15 @@ const PlanCards: FC<PlanCardProps> = (props): JSX.Element => {
           }
         >
           <div className="card-details">
-            <Tag color="#D1FAE5">{plan.nickname.toUpperCase()}</Tag>
-            <h1>
-              {`$${plan.unit_amount / 100} `}
-              <span>/mo</span>
-            </h1>
+            <div className="plans-flex">
+              <h1>
+                {`$${plan.unit_amount / 100} `}
+                <span>/mo</span>
+              </h1>
+
+              <Tag color="#D1FAE5">{plan.nickname.toUpperCase()}</Tag>
+            </div>
+
             <p>{plan.metadata.Bullet_Title}</p>
           </div>
           <div className="features">
@@ -89,9 +100,10 @@ const PlanCards: FC<PlanCardProps> = (props): JSX.Element => {
             </ul>
             <Button
               type="primary"
+              className="select-plan-btn"
               disabled={plan.id === currentOrganization.billingId.planId ? true : false}
               onClick={() => {
-                handleBilling(plan.id, plan.nickname);
+                handleClick(plan);
               }}
             >
               {plan.id === currentOrganization.billingId.planId ? 'Current Plan' : 'Select Plan'}

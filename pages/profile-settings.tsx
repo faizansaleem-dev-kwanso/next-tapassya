@@ -13,7 +13,6 @@ import Layout from '../components/layout';
 import NProgress from 'nprogress';
 import notify from '../lib/notifier';
 import { withAuth } from '../lib/auth';
-import StacksModal from '../components/common/StacksModal';
 import { ProfileSettingsProps, ProfileSettingsState } from 'interfaces';
 import 'react-image-crop/dist/ReactCrop.css';
 import '../styles/Profile.module.less';
@@ -21,6 +20,7 @@ import { deactivateAccount } from 'lib/api/team-leader';
 import OrganizationNotification from 'components/common/OrganizationNotification';
 import Pluralize from 'pluralize';
 import router from 'next/router';
+import { GetServerSideProps } from 'next';
 
 const { Option } = Select;
 const { Title } = Typography;
@@ -288,18 +288,22 @@ class ProfileSettings extends React.Component<ProfileSettingsProps, ProfileSetti
         </Head>
         {currentOrganization.isTransferred && <OrganizationNotification />}
         <Breadcrumb className="breadcrumb">
-          <Link href={`/${currentOrganization.slug}/${Pluralize(COMMON_ENTITY)}`}>
-            <a>
-              <span className="breadcrumb__inner">
-                <img src="/home.svg" alt="home" />
-              </span>
-            </a>
-          </Link>
-          <Link href="profile-settings">
-            <a>
-              <span className="breadcrumb__inner">Profile Settings</span>
-            </a>
-          </Link>
+          <Breadcrumb.Item>
+            <Link href={`/${currentOrganization.slug}/${Pluralize(COMMON_ENTITY)}`}>
+              <a>
+                <span className="breadcrumb__inner">
+                  <img src="/home.svg" alt="home" />
+                </span>
+              </a>
+            </Link>
+          </Breadcrumb.Item>
+          <Breadcrumb.Item>
+            <Link href="profile-settings">
+              <a>
+                <span className="breadcrumb__inner">Profile Settings</span>
+              </a>
+            </Link>
+          </Breadcrumb.Item>
         </Breadcrumb>
 
         <div className="profile-info">
@@ -449,19 +453,10 @@ class ProfileSettings extends React.Component<ProfileSettingsProps, ProfileSetti
                   <Button
                     type="primary"
                     className="btn-danger"
-                    onClick={() => this.showModalDeactivate()}
+                    onClick={() => router.push('/resources')}
                   >
                     Deactivate Account
                   </Button>
-
-                  <StacksModal
-                    isShowModal={this.state.isShowModal}
-                    close={this.closeModal}
-                    action={this.handleDeactivateAccount}
-                    title="Are you Sure you want to Deactivate your Account?"
-                    subTitle="All of your data will be permanently removed from our servers forever. This action cannot be undone."
-                    buttonText="Deactivate"
-                  />
                 </div>
               </div>
             </form>
@@ -477,12 +472,12 @@ class ProfileSettings extends React.Component<ProfileSettingsProps, ProfileSetti
     const { newFirstName, newLastName, newAvatarUrl } = this.state;
 
     if (!newFirstName) {
-      notify('First name is required', 'info');
+      notify('First name is required', 'error');
       return;
     }
 
     if (!newLastName) {
-      notify('Last name is required', 'info');
+      notify('Last name is required', 'error');
       return;
     }
 
@@ -576,6 +571,6 @@ class ProfileSettings extends React.Component<ProfileSettingsProps, ProfileSetti
   };
 }
 
-export const getServerSideProps = withAuth(null, { dontRedirect: true });
+export const getServerSideProps: GetServerSideProps = withAuth(null, { dontRedirect: true });
 
 export default withRouter<ProfileSettingsProps>(inject('store')(observer(ProfileSettings)));

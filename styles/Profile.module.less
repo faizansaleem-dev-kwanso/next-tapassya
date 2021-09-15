@@ -38,7 +38,7 @@
 }
 
 .profile-form {
-  max-width: 81%;
+  max-width: 75%;
   margin: 0px auto;
 
   @media only screen and (max-width: 767px) {
@@ -70,6 +70,10 @@
       font-size: 24px;
       color: #111827;
       margin-bottom: 8px;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      width: 210px;
     }
 
     p {
@@ -126,15 +130,16 @@
     width: 30%;
 
     @media only screen and (max-width: 767px) {
-      width: 45%;
+      width: 100%;
     }
   }
 
   .right-grid {
-    width: 55%;
+    width: 70%;
 
     @media only screen and (max-width: 767px) {
       width: 100%;
+      text-align: right;
     }
 
     label {
@@ -142,6 +147,15 @@
       font-size: 14px;
       color: #1f2937;
       word-break: break-word;
+    }
+
+    .ant-tag{
+      background: #F3F4F6;
+      border-radius: 12px;
+      border: 0px;
+      color: #000;
+      font-weight: 400;
+      padding: 2px 7px;
     }
   }
 
@@ -184,5 +198,10 @@
 
   @media only screen and (max-width: 767px) {
     width: 95% !important;
+  }
+
+  .ant-btn{
+    height: 38px;
+    border-radius: 6px;
   }
 }

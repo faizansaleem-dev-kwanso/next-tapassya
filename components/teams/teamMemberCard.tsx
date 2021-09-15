@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 import React, { FC, useState, useEffect } from 'react';
-import { Card, Avatar, Button } from 'antd';
+import { Card, Avatar, Button, Tooltip } from 'antd';
 import { UserOutlined } from '@ant-design/icons';
 import DeleteModal from '../../components/teams/deleteUserModal';
 import '../../styles/Teams.module.less';
@@ -9,6 +9,7 @@ import { inject, observer } from 'mobx-react';
 import Link from 'next/link';
 import { withAuth } from 'lib/auth';
 import { isUserAdmin } from 'lib/api/role';
+import { GetServerSideProps } from 'next';
 /**
  * This renders team member card with his/her email, name and delete icon
  * @param props
@@ -20,13 +21,13 @@ const MemberCard: FC<TeamMemberCardProps> = (props): JSX.Element => {
   const currentTeam = initialState.selectedTeam.team;
 
   const [isAdmin, setIsAdmin] = useState<boolean>(false);
-  const [isInstructor, setIsInstructor] = useState<boolean>(false);
+  const [isMember, setIsMember] = useState<boolean>(false);
 
   const checkRole = async (): Promise<void> => {
     const response = await isUserAdmin();
     if (response.status === 200) {
       setIsAdmin(response.isAdmin);
-      setIsInstructor(response.isInstructor);
+      setIsMember(response.isMember);
     }
   };
 
@@ -52,21 +53,30 @@ const MemberCard: FC<TeamMemberCardProps> = (props): JSX.Element => {
 
       <div className="card-text">
         {(isAdmin && currentOrganization.ownerId === currentUser._id) ||
-        (isInstructor && currentOrganization.ownerId === currentUser._id) ? (
+        (isMember && currentOrganization.ownerId === currentUser._id) ? (
           <Link
             href={`/${currentOrganization.slug}/team/${currentTeam.slug}/user-details/${user._id}`}
           >
-            <div style={{ cursor: 'pointer' }}>
-              <Button type="link">{`${user.userId.firstName} ${user.userId.lastName}`}</Button>
+            <div style={{ cursor: 'pointer' }} className="username">
+              <Tooltip
+                title={`${user.userId.firstName} ${user.userId.lastName}`}
+                placement={user.userId.firstName.length < 25 ? 'topLeft' : 'top'}
+              >
+                <Button type="link">{`${user.userId.firstName} ${user.userId.lastName}`}</Button>
+              </Tooltip>
 
               <p>{user.userId.email}</p>
               {team && <p>Teams: 2</p>}
             </div>
           </Link>
         ) : (
-          <div>
-            <Button type="link">{`${user.userId.firstName} ${user.userId.lastName}`}</Button>
-
+          <div style={{ cursor: 'pointer' }} className="username">
+            <Tooltip
+              title={`${user.userId.firstName} ${user.userId.lastName}`}
+              placement={user.userId.firstName.length < 25 ? 'topLeft' : 'top'}
+            >
+              <Button type="link">{`${user.userId.firstName} ${user.userId.lastName}`}</Button>
+            </Tooltip>
             <p>{user.userId.email}</p>
             {team && <p>Teams: 2</p>}
           </div>
@@ -74,7 +84,7 @@ const MemberCard: FC<TeamMemberCardProps> = (props): JSX.Element => {
       </div>
       {!team &&
         ((isAdmin && currentOrganization.ownerId === currentUser._id) ||
-          (isInstructor && currentOrganization.ownerId === currentUser._id)) && (
+          (isMember && currentOrganization.ownerId === currentUser._id)) && (
           <DeleteModal
             initialState={initialState}
             userId={user.userId._id}
@@ -86,5 +96,5 @@ const MemberCard: FC<TeamMemberCardProps> = (props): JSX.Element => {
   );
 };
 
-export const getServerSideProps = withAuth(null, { dontRedirect: true });
+export const getServerSideProps: GetServerSideProps = withAuth(null, { dontRedirect: true });
 export default inject('store')(observer(MemberCard));

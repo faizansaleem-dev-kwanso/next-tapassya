@@ -19,6 +19,7 @@ class Stacks {
   public teamId: string;
   public name: string;
   public subDomain: string;
+  public userId: string;
   public stage: string;
   public defaultAuth: 'generic' | 'lti11' | 'lti13';
   public namespace: string;
@@ -39,6 +40,7 @@ class Stacks {
     this.deleted = params.deleted;
     this.teamId = params.teamId;
     this.name = params.name;
+    this.userId = params.userId;
     this.subDomain = params.subDomain;
     this.stage = params.stage;
     this.defaultAuth = params.defaultAuth;
@@ -79,6 +81,33 @@ class Stacks {
         this.isLoadingProjects = false;
       });
     }
+  };
+
+  public getResourceStacks = async (): Promise<void> => {
+    const stacks = [];
+    let maximumPages = 50;
+    const options = {
+      organizationId: this.store.currentOrganization._id,
+      page: 1,
+      limit: 50,
+    };
+    for (let i = 1; i < maximumPages; i++) {
+      const response = await getStacks(options);
+      stacks.push(...response.projects);
+      const paginator = response.paginator;
+      options.page = i;
+      maximumPages = paginator.totalPages;
+    }
+    runInAction(() => {
+      this.store.resourceStacks.replace(stacks);
+    });
+  };
+
+  public removeResourceStack = (id: string) => {
+    const stack = this.store.resourceStacks.find((stack) => stack._id === id);
+    runInAction(() => {
+      this.store.resourceStacks.remove(stack);
+    });
   };
 
   public async updateStack(params: UpdateProjectParams): Promise<ProjectResponseInterface> {

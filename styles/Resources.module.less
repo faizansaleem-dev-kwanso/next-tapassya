@@ -1,0 +1,110 @@
+@import "~antd/lib/style/color/colors.less";
+
+.resource-card {
+    margin-top: 10px;
+    ::-webkit-scrollbar {
+        height: 4px;
+        min-width: 4px;
+    }
+    ::-webkit-scrollbar-thumb {
+        background: #417837;
+        border-radius: 4px;
+    }
+
+    .ant-tabs-tab-active{
+        & svg{
+
+            path{
+            stroke: #417837;    
+            }
+        }
+    }
+
+    .ant-tabs-tab{
+        & span{
+            display: flex;
+            align-items: center;
+        }
+
+        & svg{
+            margin-right: 5px;
+        }
+    }
+}
+
+.organization-settings{
+    .ant-card-head-title,
+    .ant-card-extra{
+        padding: 0px;
+    }
+
+    .ant-card-head-wrapper{
+        padding: 24px 0px 10px;
+    }
+}
+
+.resource-header-main{
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    align-items: center;
+    margin: 0px 0px 20px;
+}
+
+.resource-header{
+    border-bottom: 1px solid #d1d5db;
+    padding: 15px 0px 15px;
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-end;
+    flex-direction: column;
+    width: 90%;   
+
+    h4 {
+        font-weight: 500;
+        font-size: 24px;
+    }
+
+    p{
+        color: #6B7280;
+        margin: 0px;
+    }
+}
+
+.resource-card-teams {
+    overflow-x: auto;
+    white-space: nowrap;
+    display: flex;
+
+    .team-card.ant-card {
+        min-width: 300px;
+
+        p{
+            white-space: break-spaces;
+        }
+    }
+}
+.resource-card-stacks {
+    overflow-x: auto;
+    white-space: nowrap;
+    display: flex;
+}
+
+.empty-state {
+    display: block;
+    text-align: center;
+    p {
+        font-weight: 400;
+        font-size: 14px;
+        color: #6B7280;
+    }
+}
+
+.card-actions-resource{
+    width: 100%;
+    justify-content: flex-start;
+
+    .ant-avatar{
+        box-shadow: 0px 0px 0px 2px #FFFFFF;
+    }
+}

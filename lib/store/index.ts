@@ -20,6 +20,7 @@ class Store {
   public teams: IObservableArray<Team> = observable([]);
   public organizations: IObservableArray<Organization> = observable([]);
   public stacks: IObservableArray<ProjectInterface> = observable([]);
+  public resourceStacks: IObservableArray<ProjectInterface> = observable([]);
   public plans: PlansEntity[] = [];
   public teamStore: Team;
   public stackStore: Stacks;

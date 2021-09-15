@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 import React, { FC, useEffect, useState } from 'react';
-import { Pagination, Row, Col, Breadcrumb, Skeleton, Input } from 'antd';
+import { Pagination, Row, Col, Breadcrumb, Skeleton, Input, Tooltip } from 'antd';
 import Layout from '../../../../components/layout/index';
 import { withRouter } from 'next/router';
 import Link from 'next/link';
@@ -73,7 +73,7 @@ const ViewTeam: FC<TeamPageProps> = (props): JSX.Element => {
    * @param event
    */
   const handleSearch = async (event: React.ChangeEvent<HTMLInputElement>): Promise<void> => {
-    setSearch(event.target.value.replace(/[^a-zA-Z0-9 ]/g, ''));
+    setSearch(event.target.value);
   };
 
   return (
@@ -84,37 +84,45 @@ const ViewTeam: FC<TeamPageProps> = (props): JSX.Element => {
       </Head>
       {currentOrganization.isTransferred && <OrganizationNotification />}
       <Breadcrumb className="breadcrumb">
-        <Link href={`/${currentOrganization.slug}/${Pluralize(COMMON_ENTITY)}`}>
+        <Breadcrumb.Item>
+          <Link href={`/${currentOrganization.slug}/${Pluralize(COMMON_ENTITY)}`}>
+            <a>
+              <span className="breadcrumb__inner">
+                <img src="/home.svg" alt="home" />
+              </span>
+            </a>
+          </Link>
+        </Breadcrumb.Item>
+        <Breadcrumb.Item>
+          <Link href={`/${currentOrganization.slug}/team`}>
+            <a>
+              <span className="breadcrumb__inner">Teams</span>
+            </a>
+          </Link>
+        </Breadcrumb.Item>
+        <Breadcrumb.Item>
           <a>
-            <span className="breadcrumb__inner">
-              <img src="/home.svg" alt="home" />
-            </span>
+            <Tooltip title={currentTeam.name}>
+              <span className="breadcrumb__inner">{currentTeam.name.substring(0, 15) + '...'}</span>
+            </Tooltip>
           </a>
-        </Link>
-        <Link href={`/${currentOrganization.slug}/team`}>
-          <a>
-            <span className="breadcrumb__inner">Teams</span>
-          </a>
-        </Link>
-        <a>
-          <span className="breadcrumb__inner">{currentTeam.name}</span>
-        </a>
+        </Breadcrumb.Item>
       </Breadcrumb>
       <div className="main-wrapper">
         <div className="page-header-stacks invite-team-header">
           <div className="search-input">
             <div className="d-flex">
-              <h4>{currentTeam.name}</h4>
-              {!isLoadingMembers && teamStore.members.length > 0 && (
-                <Input
-                  size="large"
-                  placeholder="Search"
-                  value={search}
-                  onChange={handleSearch}
-                  prefix={<SearchOutlined />}
-                  className="search-input-desktop"
-                />
-              )}
+              <Tooltip title={currentTeam.name}>
+                <h4 className="title-ellipsis">{currentTeam.name}</h4>
+              </Tooltip>
+              <Input
+                size="large"
+                placeholder="Search"
+                value={search}
+                onChange={handleSearch}
+                prefix={<SearchOutlined />}
+                className="search-input-desktop"
+              />
             </div>
 
             {teamStore.members.length > 0 && (
@@ -142,7 +150,7 @@ const ViewTeam: FC<TeamPageProps> = (props): JSX.Element => {
           <div className="not-found-data">
             <NoResult
               subText="Click on the button below to add member to your team"
-              text="No Members Found"
+              text="No Member Found!"
             />
             <AddMemberModal />
           </div>
@@ -160,7 +168,7 @@ const ViewTeam: FC<TeamPageProps> = (props): JSX.Element => {
         {!isLoadingMembers && (
           <Row gutter={40}>
             {teamStore.members.map((user, index) => (
-              <Col key={index} span={8} xl={8} lg={12} md={12} sm={12} xs={24}>
+              <Col key={index} span={8} xxl={8} xl={12} lg={12} md={12} sm={12} xs={24}>
                 <MemberCard
                   user={user}
                   initialState={initialState}

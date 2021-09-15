@@ -1,8 +1,8 @@
 /* eslint-disable react/prop-types */
 import React, { FC, useEffect, useState } from 'react';
 import { inject, observer } from 'mobx-react';
-import { Modal, Button, Input, Form, Select, List, Pagination } from 'antd';
-import { MinusCircleOutlined } from '@ant-design/icons';
+import { Modal, Button, Input, Form, Select, List, Pagination, Dropdown, Menu } from 'antd';
+import { MinusCircleOutlined, EllipsisOutlined } from '@ant-design/icons';
 import { InviteMemberModalProps } from '../../interfaces/index';
 import '../../styles/Teams.module.less';
 import '../../styles/Layout.module.less';
@@ -12,7 +12,7 @@ import { sendInvite, getInvites, deleteInvites, resendInvites } from 'lib/api/in
 import notify from 'lib/notifier';
 import { PAGE_SIZE } from 'lib/consts';
 import { Paginate } from '../../interfaces/index';
-import { InviteInterface, InviteResponseInterface } from 'interfaces/inviteInterfaces';
+import { InviteInterface } from 'interfaces/inviteInterfaces';
 import NoResult from 'components/common/NoResult';
 
 const { Option } = Select;
@@ -42,7 +42,7 @@ const InviteMemberModal: FC<InviteMemberModalProps> = (props): JSX.Element => {
    * @param {page}
    */
   const getPendingInvites = async ({ page }: { page: number }): Promise<void> => {
-    const data: InviteResponseInterface = await getInvites({
+    const data = await getInvites({
       page: page,
       limit: PAGE_SIZE,
       organizationId: currentOrganization._id,
@@ -79,7 +79,7 @@ const InviteMemberModal: FC<InviteMemberModalProps> = (props): JSX.Element => {
    * @param invitationId
    */
   const handleDeleteInvite = async (invitationId: string): Promise<void> => {
-    const data: InviteResponseInterface = await deleteInvites(invitationId);
+    const data = await deleteInvites(invitationId);
     if (data.status === 200) {
       getPendingInvites({ page: 1 });
       notify(data.message, 'success');
@@ -102,7 +102,7 @@ const InviteMemberModal: FC<InviteMemberModalProps> = (props): JSX.Element => {
     roleId: string;
   }): Promise<void> => {
     setLoading(true);
-    const data: InviteResponseInterface = await resendInvites({
+    const data = await resendInvites({
       email: email,
       invitationId: inviteId,
       type: 'INVITE-MEMBER',
@@ -144,7 +144,7 @@ const InviteMemberModal: FC<InviteMemberModalProps> = (props): JSX.Element => {
           type: 'INVITE-MEMBER',
         },
       ];
-      const response: InviteResponseInterface = await sendInvite({ invitations: invitations });
+      const response = await sendInvite({ invitations: invitations });
       if (response.status === 200) {
         setLoading(false);
         notify(response.message, 'success');
@@ -173,7 +173,7 @@ const InviteMemberModal: FC<InviteMemberModalProps> = (props): JSX.Element => {
           type: 'INVITE-MEMBER',
         });
       });
-      const response: InviteResponseInterface = await sendInvite({ invitations: invitations });
+      const response = await sendInvite({ invitations: invitations });
       if (response.status === 200) {
         setLoading(false);
         notify(response.message, 'success');
@@ -227,15 +227,15 @@ const InviteMemberModal: FC<InviteMemberModalProps> = (props): JSX.Element => {
               <Form.List name="extraMembers">
                 {(fields, { add, remove }) => (
                   <>
-                    {fields.map((field, index) => (
-                      <Form.Item key={index} className="add-more-input-grid">
+                    {fields.map((field) => (
+                      <Form.Item key={field.key} className="add-more-input-grid">
                         <Form.Item
                           className="add-more-input"
                           {...field}
                           name={[field.name, 'email']}
                           fieldKey={[field.fieldKey, 'email']}
                           rules={[FormRules.email]}
-                          key={1}
+                          key="1"
                         >
                           <Input placeholder="name@work-email.com" type="email" />
                         </Form.Item>
@@ -244,7 +244,7 @@ const InviteMemberModal: FC<InviteMemberModalProps> = (props): JSX.Element => {
                           fieldKey={[field.fieldKey, 'role']}
                           rules={[FormRules.role]}
                           className="select-role-form"
-                          key={2}
+                          key="2"
                         >
                           <Select placeholder="Add Role">
                             {userRoles.map((item, index) => (
@@ -288,54 +288,89 @@ const InviteMemberModal: FC<InviteMemberModalProps> = (props): JSX.Element => {
                 <NoResult subText="You have no Invitations sent Yet" text="No Invites Sent!" />
               </div>
             )}
-            {pendingInvites.length !== 0 && (
-              <List
-                itemLayout="horizontal"
-                dataSource={pendingInvites}
-                renderItem={(item, index) => (
-                  <List.Item
-                    key={index}
-                    actions={[
-                      <Button key="1" danger onClick={() => handleDeleteInvite(item._id)}>
-                        Delete
-                      </Button>,
-                      item.status === 'EXPIRED'
-                        ? [
-                            <Button
-                              type="primary"
-                              key="2"
-                              loading={loading}
-                              className="button-resend"
-                              onClick={() =>
-                                handleResendInvite({
-                                  email: item.email,
-                                  inviteId: item._id,
-                                  roleId: item.roleId,
-                                })
-                              }
-                            >
-                              Resend
-                            </Button>,
-                          ]
-                        : '',
-                    ]}
+            <div className="mobile-view-actions">
+              {pendingInvites.map((invite, index) => (
+                <div key={index} className="flex-wrapper">
+                  <div className="flex-tag">
+                    <p>{invite.email}</p>
+                    {invite.status === 'EXPIRED' && <span className="status-badge">EXPIRED</span>}
+                  </div>
+                  <Dropdown
+                    overlay={() => (
+                      <Menu>
+                        {invite.status === 'EXPIRED' && (
+                          <Menu.Item
+                            onClick={() =>
+                              handleResendInvite({
+                                email: invite.email,
+                                inviteId: invite._id,
+                                roleId: invite.roleId,
+                              })
+                            }
+                          >
+                            Resend
+                          </Menu.Item>
+                        )}
+                        <Menu.Item onClick={() => handleDeleteInvite(invite._id)}>Delete</Menu.Item>
+                      </Menu>
+                    )}
+                    placement="bottomLeft"
                   >
-                    <List.Item.Meta
-                      title={
-                        <>
-                          <p>{item.email} </p>
-                          {item.status === 'EXPIRED' ? (
-                            <span className="status-badge">Expired</span>
-                          ) : (
-                            ''
-                          )}
-                        </>
-                      }
-                    />
-                  </List.Item>
-                )}
-              />
-            )}
+                    <EllipsisOutlined style={{ transform: 'rotate(90deg)' }} />
+                  </Dropdown>
+                </div>
+              ))}
+            </div>
+
+            <div className="desktop-view-actions">
+              {pendingInvites.length !== 0 && (
+                <List
+                  itemLayout="horizontal"
+                  dataSource={pendingInvites}
+                  renderItem={(item, index) => (
+                    <List.Item
+                      key={index}
+                      actions={[
+                        <Button key="1" danger onClick={() => handleDeleteInvite(item._id)}>
+                          Delete
+                        </Button>,
+                        item.status === 'EXPIRED'
+                          ? [
+                              <Button
+                                type="primary"
+                                key="2"
+                                className="button-resend"
+                                onClick={() =>
+                                  handleResendInvite({
+                                    email: item.email,
+                                    inviteId: item._id,
+                                    roleId: item.roleId,
+                                  })
+                                }
+                              >
+                                Resend
+                              </Button>,
+                            ]
+                          : '',
+                      ]}
+                    >
+                      <List.Item.Meta
+                        title={
+                          <>
+                            <p>{item.email} </p>
+                            {item.status === 'EXPIRED' ? (
+                              <span className="status-badge">Expired</span>
+                            ) : (
+                              ''
+                            )}
+                          </>
+                        }
+                      />
+                    </List.Item>
+                  )}
+                />
+              )}
+            </div>
           </div>
           {paginate.totalDocs > 6 && (
             <div className="pagination-illumidesk">

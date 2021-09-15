@@ -79,7 +79,6 @@ const NewTeamModal: FC<AddTeamModalProps> = (props): JSX.Element => {
         selectedPlan = plan;
       }
     });
-    console.log(selectedPlan.metadata, '<<<<<METADATA');
     if (selectedPlan.metadata.Conditional_Team) {
       if (selectedPlan && teams.length >= +selectedPlan.metadata.Conditional_Team) {
         setShowModal(true);
@@ -141,7 +140,7 @@ const NewTeamModal: FC<AddTeamModalProps> = (props): JSX.Element => {
             </div>
 
             <Form.Item name="teamName" label="Team Name" rules={[FormRules.teamName]}>
-              <Input maxLength={32} />
+              <Input maxLength={50} />
             </Form.Item>
             <Form.Item name="aboutTeam" label="About Team">
               <TextArea rows={3} maxLength={256} />

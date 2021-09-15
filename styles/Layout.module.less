@@ -249,13 +249,13 @@
 
 header.ant-layout-header {
   position: initial !important;
-  padding: 10px 19px;
+  padding: 10px 17px;
   background-color: @white !important;
   box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.1), 0px 1px 2px rgba(0, 0, 0, 0.06);
 
-  @media only screen and (max-width: 767px) {
-    box-shadow: none;
-  }
+  // @media only screen and (max-width: 767px) {
+  //   box-shadow: none;
+  // }
 
   .header-flex {
     display: flex;
@@ -342,10 +342,27 @@ h5.ant-typography {
   color: #1f2937;
 }
 
+.search-input-mobile{
+  @media only screen and (max-width: 767px){
+    margin-bottom: 20px;
+  }
+}
+
 .search-input {
   h4.ant-typography {
-    font-size: 24px !important;
-    margin: 0px !important;
+    font-size: 24px;
+    margin: 0px;
+
+    @media only screen and (max-width: 767px){
+      font-size: 18px;
+    }
+  }
+
+  .ant-btn-primary.ant-btn{
+    @media only screen and (max-width: 767px){
+      font-size: 12px !important;
+      padding: 0px 7px !important;
+    }
   }
 }
 
@@ -357,11 +374,11 @@ h5.ant-typography {
 .main-wrapper {
   padding: 20px;
   position: relative;
-  min-height: calc(100vh - 180px);
+  min-height: calc(100vh - 225px);
 }
 
 .ant-layout-content {
-  height: calc(100vh - 135px);
+  height: calc(100vh - 122px);
   overflow-y: auto;
   background-color: #f9fafb;
 
@@ -380,6 +397,7 @@ h5.ant-typography {
 
   @media only screen and (max-width: 767px) {
     padding: 14px 0px;
+    margin: 0px;
   }
 }
 
@@ -469,27 +487,36 @@ h5.ant-typography {
 .breadcrumb {
   padding: 0px 15px;
   display: flex;
+  background-color: white;
   height: 45px;
   border-bottom: 1px solid #e5e7eb;
 
-  a {
-    font-weight: 500;
-    font-size: 14px;
-    color: #6b7280 !important;
-    position: relative;
-    display: flex;
-    align-items: center;
-    text-decoration: none;
+  span.ant-breadcrumb-separator {
+    display: none;
+  }
 
-    &:last-child {
-      color: #417837 !important;
-      cursor: default;
+  .ant-breadcrumb-link {
+    a {
+      display: block;
+      padding: 14px 0px 14px 0px;
+      position: relative;
+      z-index: 99;
+
+      @media only screen and (max-width: 1024px) {
+        height: auto;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        width: 175px;
+      }
+
+      @media only screen and (max-width: 767px) {
+        width: 75px;
+      }
     }
+  }
 
-    @media only screen and (max-width: 414px) {
-      font-size: 11px;
-    }
-
+  >span {
     &:after {
       content: "";
       position: absolute;
@@ -505,9 +532,28 @@ h5.ant-typography {
     }
 
     &:last-child {
+      
       &:after {
         content: none;
       }
+    }
+  }
+
+  span {
+    font-weight: 500;
+    font-size: 14px;
+    color: #6b7280;
+    position: relative;
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+
+    &:hover {
+      cursor: pointer;
+    }
+
+    @media only screen and (max-width: 414px) {
+      font-size: 11px;
     }
 
     & img {
@@ -516,12 +562,26 @@ h5.ant-typography {
   }
 
   .breadcrumb__inner {
-    padding: 0px 20px;
+    padding: 0px 20px 0px 16px;
+
+    @media only screen and (max-width: 1024px) {
+      padding: 0px 10px;
+      width: 170px;
+      display: block;
+      padding-right: 5px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
 
     @media only screen and (max-width: 414px) {
-      padding: 0px 10px;
+      width: 90px;
     }
   }
+}
+
+.ant-breadcrumb.breadcrumb > span:last-child a span {
+  color: #6a9142;
 }
 
 .previous-screen {
@@ -540,7 +600,7 @@ h5.ant-typography {
 
 .page-header-stacks {
   border-bottom: 1px solid #d1d5db;
-  padding: 15px;
+  padding: 15px 0px 15px;
   margin: 0px 0px 20px;
   display: flex;
   align-items: center;
@@ -587,6 +647,10 @@ h5.ant-typography {
     font-weight: 500;
     font-size: 14px;
     color: #6b7280;
+
+    @media only screen and (max-width: 767px){
+      font-size: 10px !important;
+    }
   }
 
   .ant-pagination-item {
@@ -595,11 +659,15 @@ h5.ant-typography {
     color: #6b7280;
     background-color: transparent;
     border: 0px;
+
+    @media only screen and (max-width: 767px){
+      font-size: 10px;
+    }
   }
 
   .ant-pagination-item-link {
     background-color: transparent;
-    border: 0px;
+    border: 0px !important;
   }
 
   .ant-pagination-disabled {
@@ -646,6 +714,15 @@ h5.ant-typography {
       color: #ffffff;
     }
   }
+
+  .ant-btn-primary.ant-btn {
+    @media only screen and (max-width: 414px){
+      font-size: 12px;
+      padding: 0px 7px;
+      height: 32px;
+      min-width: 61px;
+    }  
+  }
 }
 
 // dialog
@@ -657,6 +734,7 @@ h5.ant-typography {
     line-height: 27px;
     color: #1f2937;
     margin-bottom: 8px;
+    padding-right: 15px;
 
     @media only screen and (max-width: 767px) {
       font-size: 16px !important;
@@ -704,6 +782,11 @@ h5.ant-typography {
       background: #ef4444;
       border: 1px solid #ef4444;
       box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.05);
+    }
+    .ant-btn-dangerous.ant-btn:disabled {
+      background-color: #efefef;
+      border: 1px solid #e0dfdf;
+      color: #d4d4d4;
     }
   }
 }
@@ -765,6 +848,12 @@ h5.ant-typography {
   border-radius: 6px;
   width: 224px;
   padding: 0px;
+  min-height: 100px;
+  max-height: 200px;
+
+  overflow: auto;
+
+ 
 
   @media only screen and (max-width: 767px) {
     width: 215px;
@@ -816,7 +905,7 @@ h5.ant-typography {
 }
 
 .ant-tooltip {
-  min-width: 170px;
+  min-width: 83px;
 
   .d-flex-profile {
     .user-badge {
@@ -838,7 +927,7 @@ h5.ant-typography {
 }
 
 .ant-menu-item.profile-dropdown-link {
-  margin: 40px 0px !important;
+  margin: 40px 0px 17px !important;
 
   & img {
     margin-right: 0px !important;
@@ -897,6 +986,10 @@ h5.ant-typography {
     .ant-menu-item.profile-dropdown-link {
       padding: 0px 13px !important;
     }
+  }
+
+  .ant-menu-item-divider{
+    margin-bottom: 17px;
   }
 }
 
@@ -974,7 +1067,7 @@ h5.ant-typography {
     h3 {
       max-width: 315px;
       width: 100%;
-      font-weight: 400;
+      font-weight: 700;
       font-size: 24px;
       color: #ffffff;
       margin: 70px auto;
@@ -1153,6 +1246,7 @@ h5.ant-typography {
       font-size: 14px;
       font-weight: 300;
       color: #6b7280;
+      word-break: break-word;
     }
   }
 
@@ -1269,6 +1363,10 @@ h5.ant-typography {
   margin-top: 17px;
 
   @media only screen and (max-width: 767px) {
+    padding: 13px;
+  }
+
+  @media only screen and (max-width: 767px) {
     flex-wrap: wrap;
     justify-content: flex-end;
   }
@@ -1278,6 +1376,7 @@ h5.ant-typography {
     font-size: 14px;
     margin: 0px;
     color: #1f2937;
+    word-break: break-word;
   }
 
   button {
@@ -1291,13 +1390,15 @@ h5.ant-typography {
     font-size: 12px;
     color: #b91c1c;
 
-    @media only screen and (max-width: 767px) {
+    @media only screen and (max-width: 1024px) {
       margin-top: 15px;
+      font-size: 10px;
     }
   }
 }
 
 .remove-organization-footer {
+  
   margin-top: 16px;
   display: flex;
   align-items: center;
@@ -1373,7 +1474,7 @@ h5.ant-typography {
 
     @media only screen and (max-width: 767px) {
       width: 100%;
-      margin: 0px 0px 20px;
+      margin: 0px;
     }
 
     & svg {
@@ -1395,6 +1496,7 @@ h5.ant-typography {
   align-items: center;
   justify-content: center;
   flex-direction: column;
+  text-align: center;
 
   // @media only screen and (max-width: 767px) {
   //   min-height: 100%;
@@ -1412,6 +1514,7 @@ h5.ant-typography {
     font-size: 16px;
     color: #6b7280;
     margin-bottom: 32px;
+    word-break: break-word !important;
   }
 
   .ant-btn-primary {
@@ -1486,6 +1589,7 @@ h5.ant-typography {
 .delete-organization-button {
   background: #fef2f2;
   border: 1px solid #fef2f2;
+  border-radius: 6px;
   box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.05);
   color: #b91c1c;
 
@@ -1518,6 +1622,7 @@ h5.ant-typography {
 // notification error
 
 .organization-notification {
+  
   & .ant-alert-message {
     color: red;
     font-weight: 500;
@@ -1562,14 +1667,18 @@ h5.ant-typography {
   & .stacks-card.ant-card {
     &:nth-child(3),
     &:nth-child(6) {
-      margin-right: 0px;
+      @media only screen and (min-width: 1025px){
+        margin-right: 0px;
+      }
     }
   }
 
   & .team-card.ant-card {
     &:nth-child(3),
     &:nth-child(6) {
-      margin-right: 0px;
+      @media only screen and (min-width: 1025px){
+        margin-right: 0px;
+      }
     }
   }
 }
@@ -1623,6 +1732,8 @@ h5.ant-typography {
 
 .ant-footer.ant-layout-footer {
   padding: 18px 15px;
+  // position: absolute;
+  // bottom: 0;
 }
 
 .ant-form-item-label > label.ant-form-item-required:not(.ant-form-item-required-mark-optional)::before{
@@ -1636,11 +1747,25 @@ h5.ant-typography {
 
 }
 
+.ant-form-item-label > label {
+  display: block;
+  min-height: auto;
+  word-break: break-all;
+  white-space: break-spaces;
+  text-align: left;
+  height: auto;
+}
+
 .disclaimer-content{
   max-width: 366px;
   text-align: center;
+  h4{
+    font-weight: 700px;
+    font-size: 18px;
+  }
   p{
     font-size: 14px;
+    font-weight: 400px;
     color: #6B7280;
     margin: 8px 0px 24px;
   }
@@ -1654,4 +1779,98 @@ h5.ant-typography {
   .anticon {
     font-size: 17px;
   }
+}
+
+.title-ellipsis{
+  width: 25ch;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+
+  @media only screen and (min-width: 375px) {
+    width: 7ch;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+  }
+  
+  @media only screen and (max-width: 414px) {
+    width: 15ch;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+  }
+}
+
+.d-flex-organization{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  @media only screen and (max-width: 767px){
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+.ant-modal p{
+  word-break: break-all;
+}
+
+.ant-form-item-label > label.ant-form-item-required:not(.ant-form-item-required-mark-optional)::before{
+  display: none !important;
+}
+
+.tag-name{
+  width: 80px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.ant-modal{
+  .ant-form-item .ant-form-item-label > label{
+      font-weight: 500;
+  }
+}
+
+.enable-auth{
+  .right-grid{
+    @media only screen and (max-width: 414px){
+      width: 70% !important;
+    }
+  }
+}
+
+.proceed-button{
+  text-align: right;
+  padding: 15px 0px 0px 0px;
+}
+
+.ant-select-multiple .ant-select-selection-item{
+  background: #F3F4F6 !important;
+  border-radius: 12px !important;
+}
+
+.d-flex-delete{
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+.error-info-stack {
+  word-break: break-word;
+}
+
+.ant-pagination-prev .ant-pagination-item-link, .ant-pagination-next .ant-pagination-item-link{
+  background-color: transparent !important;
+}
+
+#newTeam p{
+  word-break: break-word;
+}
+
+.ant-dropdown-menu{
+  box-shadow: 0px 0px 0px 1px rgba(0, 0, 0, 0.05), 0px 10px 15px -3px rgba(0, 0, 0, 0.1), 0px 4px 6px -2px rgba(0, 0, 0, 0.05);
+  border-radius: 6px;
+  min-width: 120px;
 }

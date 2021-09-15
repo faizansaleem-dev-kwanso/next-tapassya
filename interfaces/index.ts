@@ -5,8 +5,14 @@ import { Team } from '../lib/store';
 import { Stacks } from 'lib/store/stacks';
 import { Organization } from 'lib/store/organization';
 import { CardInterface, OrganizationInterface, PlansEntity } from './organizationInterfaces';
-import { RoleTableInterface, TeamMemberInterface, TeamResponse } from './teamInterfaces';
+import {
+  RoleTableInterface,
+  TeamInterface,
+  TeamMemberInterface,
+  TeamResponse,
+} from './teamInterfaces';
 import { UserInterface } from './userInterfaces';
+import { ProjectInterface } from './projectsInterface';
 
 export interface StackStateInterface {
   loading: boolean;
@@ -33,6 +39,7 @@ export interface StackModalInterface {
   subTitle: string;
   buttonText: string;
   isShowModal: boolean;
+  extraText?: string;
   name?: string;
   close: () => void;
   action?: (mode?: 'setup' | 'subscription') => void;
@@ -63,11 +70,13 @@ export interface TeamCardProps {
   store?: Store;
   slug?: string;
   defaultTeam?: boolean;
+  resourceView?: boolean;
   teamId?: string;
   content: string;
-  initialState: InitialStateInterface;
+  initialState?: InitialStateInterface;
   memberDetailView?: boolean;
   memberView?: boolean;
+  avatarUrls?: string[];
 }
 
 export interface TeamPageProps {
@@ -79,6 +88,12 @@ export interface TeamPageProps {
   initialState: InitialStateInterface;
 }
 
+export interface AccountDeactivateProps {
+  store: Store;
+}
+
+export type ResourcesProps = TeamPageProps;
+export type ReviewDowngradeProps = TeamPageProps;
 export interface InviteMemberModalProps {
   open: boolean;
   store?: Store;
@@ -115,7 +130,7 @@ export interface AddTeamModalProps {
 
 //Temporary interface might change later
 export interface RolesTableProps {
-  deleteRole: (user: any) => void;
+  deleteRole: (user: UserRoleDetails) => void;
   data: RoleTableInterface[];
 }
 
@@ -139,6 +154,7 @@ export interface TransferAccountForm {
 export interface TransferAccountModalProps {
   store?: Store;
   setIsTransferred: React.Dispatch<React.SetStateAction<boolean>>;
+  organizationId?: string;
 }
 
 export interface LayoutProps extends OnboardingHeaderProps {
@@ -152,7 +168,7 @@ export interface OrganizationModalForm {
 export interface InviteMemberModalForm {
   email: string;
   role: string;
-  extraMembers: Array<Record<string, any>> | undefined;
+  extraMembers: [{ email: string; role: string }] | undefined;
 }
 
 export interface NewTeamModalForm {
@@ -296,7 +312,9 @@ export interface UserRoleDetails {
 
 export interface StackIdState {
   stack: object;
+  errors: object;
   defaultAuth: string;
+  teams: string[];
   disabled: boolean;
   loading: boolean;
   isDeploying: boolean;
@@ -349,4 +367,19 @@ export interface DeleteOrganizationModalProps {
 
 export interface StripeCardProps {
   card: CardInterface;
+}
+export interface DataServerSideProps {
+  props: {
+    initialState: InitialStateInterface;
+    isMobile: boolean;
+  };
+}
+
+export interface ResourceCardProps {
+  teams: TeamInterface[];
+  projects: ProjectInterface[];
+  organizationName: string;
+  defaultOrg: boolean;
+  plan: string;
+  orgTransferred: boolean;
 }

@@ -30,7 +30,7 @@
       p {
         font-size: 14px;
         color: #6b7280;
-        margin-bottom: 24px;
+        // margin-bottom: 24px;
         max-width: 351px;
         width: 100%;
       }
@@ -98,6 +98,10 @@
     align-items: flex-start;
     padding-bottom: 20px;
 
+    @media only screen and (max-width: 767px){
+      margin-bottom: 0px;
+    }
+
     .ant-form-item-label {
       font-weight: 500;
       font-size: 14px;
@@ -110,13 +114,15 @@
       border: 1px solid #d1d5db;
       box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.05);
       border-radius: 6px;
+
+      @media only screen and (max-width: 767px){
+        margin-top: 0px;
+      }
     }
   }
 
   .organization-danger {
-    border: 1px solid #dc2626;
-    padding: 10px 16px 16px;
-    border-radius: 4px;
+    padding-bottom: 16px;
     margin-top: 40px;
 
     @media only screen and (max-width: 767px) {

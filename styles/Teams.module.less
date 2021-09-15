@@ -8,6 +8,10 @@
   width: 32%;
   margin-right: 15px;
 
+  @media only screen and (max-width: 1024px) {
+    width: 47%;
+  }
+
   @media only screen and (max-width: 767px) {
     width: 100%;
     margin-right: 0px;
@@ -27,7 +31,8 @@
       margin-bottom: 0px;
       text-transform: capitalize;
       word-break: break-word;
-      min-height: 21px;
+      min-height: 40px;
+      max-height: 21px;
     }
   }
 
@@ -41,7 +46,7 @@
     line-height: 27px;
     color: #1f2937;
     text-transform: capitalize;
-    max-width: 129px;
+    max-width: 15ch;
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
@@ -73,7 +78,7 @@
       0px 10px 15px -3px rgba(0, 0, 0, 0.1),
       0px 4px 6px -2px rgba(0, 0, 0, 0.05);
     border-radius: 6px;
-    padding: 15px;
+    padding: 15px 5px 15px 10px;
   }
 
   .ant-btn {
@@ -100,6 +105,7 @@
     padding: 0px;
     display: flex;
     align-items: flex-start;
+    align-items: center;
   }
 
   h5,
@@ -124,6 +130,27 @@
   .card-text {
     padding: 0px 24px;
     flex: 1;
+
+    @media only screen and (max-width: 560px){
+      width: 215px;
+    }
+
+    .username {
+      button {
+        span {
+          width: 25ch;
+          text-align: left;
+          white-space: nowrap;
+          text-overflow: ellipsis;
+          overflow: hidden;
+          @media (max-width: 768px) {
+            width: 20ch;
+          }
+        }
+      }
+      cursor: pointer;
+      
+    }
 
     button {
       padding: 0px;
@@ -165,6 +192,10 @@
     box-shadow: 0px 1px 2px rgb(0 0 0 / 5%);
     border-radius: 6px;
     margin: 15px 0px 5px;
+  }
+
+  p{
+    word-break: break-word;
   }
 }
 
@@ -291,8 +322,16 @@
       color: #111827;
       margin: 0px;
 
-      @media only screen and (max-width: 480px) {
+      @media only screen and (max-width: 1024px) {
         font-size: 18px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        width: 30ch;
+      }
+
+      @media only screen and (max-width: 560px) {
+        width: 17ch;
       }
     }
 
@@ -540,7 +579,7 @@
     align-items: center;
 
     @media only screen and (max-width: 599px) {
-      margin-left: 0px;
+      margin-left: 15px;
     }
   }
 
@@ -556,6 +595,12 @@
   .ant-form-item .ant-select,
   .ant-form-item .ant-cascader-picker {
     width: 150px !important;
+  }
+}
+
+.desktop-view-actions{
+  .ant-list-item-action > li{
+    padding: 0px !important;
   }
 }
 
@@ -623,6 +668,12 @@
       font-size: 18px;
       margin: 0px;
       color: #1e293b;
+
+      @media only screen and (max-width: 767px) {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
     }
 
     .ant-list-item-meta-description {
@@ -675,8 +726,8 @@
 }
 
 .assign-role-filter {
-  display: flex;
-  align-items: center;
+  display: flex !important;
+  justify-content: flex-start !important;
   margin-bottom: 15px;
 
   .ant-form-item {
@@ -701,15 +752,12 @@
 
     @media only screen and (max-width: 599px) {
       margin-right: 0px;
-      width: 100%;
-      margin-bottom: 15px;
+      width: 95%;
     }
   }
 
   .ant-btn {
-    color: #64748b;
     font-size: 14px;
-    background-color: transparent;
     border: 0px;
     box-shadow: none;
 
@@ -778,6 +826,13 @@
           font-weight: 500;
           font-size: 14px;
           color: #111827;
+
+          @media only screen and (max-width: 767px) {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            width: 100px;
+          }
         }
 
         .user-email {
@@ -791,7 +846,6 @@
         background: #f3f4f6;
         border: 1px solid #f3f4f6;
         border-radius: 4px;
-        min-width: 80px;
         height: 20px;
         font-weight: 400;
         font-size: 12px;
@@ -845,6 +899,15 @@
       font-size: 18px;
       color: #1e293b;
       margin: 0px;
+      display: flex;
+      align-items: center;
+
+      p{
+        margin-right: 5px;
+        font-weight: 600;
+        font-size: 18px;
+        color: #1E293B;
+      }
     }
 
     .ant-list-item-meta-description {
@@ -868,6 +931,10 @@
     }
   }
 
+  .ant-list-item-action-split{
+    display: none;
+  }
+
   .status-badge {
     background: #fee2e2;
     border-radius: 4px;
@@ -875,7 +942,9 @@
     font-size: 12px;
     color: #b91c1c;
     text-align: center;
-    padding: 3px 10px;
+    padding: 0px 10px;
+    height: 20px;
+    line-height: 19px;
   }
 
   button {
@@ -894,6 +963,11 @@
     border: 1px solid #417837;
     color: #fff !important;
     height: 28px;
+    border-radius: 4px;
+      margin-left: 8px;
+      font-weight: 500;
+font-size: 12px;
+line-height: 16px;
   }
 }
 
@@ -937,5 +1011,38 @@
 .add-another-member {
   .ant-select.ant-select-single.ant-select-show-arrow {
     margin-right: 25px;
+  }
+}
+
+.delete-modal-txt {
+  p {
+    color: #1F2937 !important;
+  }
+}
+
+.mobile-view-actions {
+  .flex-wrapper{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 24px;
+    border-bottom: 1px solid #D1D5DB;
+  }
+
+  .flex-tag{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 90%;
+  }
+
+  @media only screen and (min-width: 768px) {
+    display: none;
+  }
+}
+  
+.desktop-view-actions {
+  @media only screen and (max-width: 767px) {
+    display: none;
   }
 }
