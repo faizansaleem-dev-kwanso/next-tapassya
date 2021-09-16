@@ -17,7 +17,7 @@ const DeActivateModal: FC = () => {
   }, [visibility]);
   return (
     <div>
-      <Button type="primary" danger onClick={changeVisibility}>
+      <Button className="deactivate-button" type="primary" danger onClick={changeVisibility}>
         Deactivate
       </Button>
       <Modal

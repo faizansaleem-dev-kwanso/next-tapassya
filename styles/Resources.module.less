@@ -49,6 +49,18 @@
     justify-content: space-between;
     align-items: center;
     margin: 0px 0px 20px;
+    @media only screen and (max-width: 768px) {
+        flex-direction: column;
+        div {
+            display: flex;
+            width: 100%;
+            .deactivate-button {
+                margin-top: 5px;
+                min-width: 100%;
+            }
+        }
+    }
+    
 }
 
 .resource-header{
@@ -88,6 +100,10 @@
     overflow-x: auto;
     white-space: nowrap;
     display: flex;
+
+    @media only screen and (max-width: 767px){
+        flex-direction: column;
+    }
 }
 
 .empty-state {

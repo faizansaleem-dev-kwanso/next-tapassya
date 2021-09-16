@@ -18,6 +18,7 @@ import {
   Select,
   Pagination,
   Skeleton,
+  Tooltip,
 } from 'antd';
 import { SearchOutlined, UserOutlined } from '@ant-design/icons';
 import Layout from '../../../../../components/layout/index';
@@ -385,7 +386,17 @@ const Test: FC<TeamPageProps> = (props): JSX.Element => {
         <Breadcrumb.Item>
           <a>
             <span className="breadcrumb__inner">
-              {userDetails.firstName} {userDetails.lastName}
+              {userDetails.firstName &&
+              userDetails.lastName &&
+              userDetails.firstName.length >= 15 &&
+              userDetails.lastName.length >= 15 ? (
+                <Tooltip title={`${userDetails.firstName} ${userDetails.lastName}`}>
+                  {userDetails.firstName.substring(0, 15)}...{' '}
+                  {userDetails.lastName.substring(0, 15)}...
+                </Tooltip>
+              ) : (
+                `${userDetails.firstName} ${userDetails.lastName}`
+              )}
             </span>
           </a>
         </Breadcrumb.Item>

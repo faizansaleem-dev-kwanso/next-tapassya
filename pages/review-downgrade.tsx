@@ -132,7 +132,12 @@ const ReviewDowngrade: FC<ReviewDowngradeProps> = (props): JSX.Element => {
     return (
       <Card className="stacks-card">
         <a>
-          <Title level={5}>{name}</Title>
+          {name.length > 21 && (
+            <Tooltip title={name} placement="topLeft">
+              <Title level={5}>{name.substring(0, 21)}...</Title>
+            </Tooltip>
+          )}
+          {name.length <= 21 && <Title level={5}>{name}</Title>}
           <p>{`${subDomain}.illumidesk.com`}</p>
           {getStatusFromActions(actions)}
         </a>
