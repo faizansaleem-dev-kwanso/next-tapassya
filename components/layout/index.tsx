@@ -71,7 +71,7 @@ class LayoutComponent extends React.Component<LayoutProps> {
         ? this.setState({ paymentFail: false })
         : this.setState({ paymentFail: true });
     }
-    (function (w, d, i) {
+    (function(w, d, i) {
       function l() {
         if (!d.getElementById(i)) {
           const f = d.getElementsByTagName('script')[0],
@@ -83,7 +83,7 @@ class LayoutComponent extends React.Component<LayoutProps> {
         }
       }
       if ('function' != typeof w.Canny) {
-        const c = function () {
+        const c = function() {
           // eslint-disable-next-line
           c.q.push(arguments);
         } as any;
@@ -327,119 +327,128 @@ class LayoutComponent extends React.Component<LayoutProps> {
     // This renders the whole layout
     return (
       <Layout className="layout-wrapper">
-        <div
-          className="drawer-backdrop"
-          style={{ display: !this.state.collapsed ? 'block' : '' }}
-        ></div>
         {currentOrganization &&
           currentOrganization.billingId.isCard &&
           typeof window !== 'undefined' &&
           window.location.pathname !== `/${currentOrganization.slug}/setup-complete` &&
           window.location.pathname !== `/${currentOrganization.slug}/start-trial` && (
-            <Sider
-              theme="light"
-              collapsible
-              collapsed={this.state.collapsed}
-              onCollapse={this.onCollapse}
-              className="sidebar"
-              width="256"
-              breakpoint="md"
-              collapsedWidth="0px"
-            >
-              <div className="logo for-mobile-toggle">
-                {this.renderHeaderLogo()}
-
-                <div>
-                  {React.createElement(
-                    this.state.collapsed ? MenuUnfoldOutlined : MenuFoldOutlined,
-                    {
-                      className: 'trigger trigger-for-mobile',
-                      onClick: this.toggle,
-                    },
-                  )}
-                </div>
-              </div>
-              <Menu theme="light" mode="inline" selectedKeys={this.getDefaultSelected()}>
-                <Menu.Item className="profile-dropdown-link" data-key="1">
-                  <Dropdown overlay={organizationMenu} trigger={['click']}>
-                    <a
-                      className="ant-dropdown-link d-flex-profile"
-                      onClick={(e) => e.preventDefault()}
-                    >
-                      <div className="d-flex-profile">
-                        <div className="user-badge">{currentOrganization.name.charAt(0)}</div>
-                        <div>
-                          <h5>{currentOrganization.name}</h5>
-                        </div>
-                      </div>
-
-                      <img src="/porfile-open.svg" alt="dropdown" />
-                    </a>
-                  </Dropdown>
-                </Menu.Item>
-                <Menu.Divider />
-                <Menu.Item key="1">
-                  <Link href={`/${currentOrganization.slug}/${Pluralize(COMMON_ENTITY)}`}>
-                    <Button icon={<img src="/stacks.svg" alt="stacks" />} type="link">
-                      {capitalize(Pluralize(COMMON_ENTITY))}
-                    </Button>
-                  </Link>
-                </Menu.Item>
-
-                <Menu.Item key="2">
-                  <Link href={`/${currentOrganization.slug}/team`}>
-                    <Button icon={<img src="/Teams.svg" alt="stacks" />} type="link">
-                      Teams
-                    </Button>
-                  </Link>
-                </Menu.Item>
-                <Menu.SubMenu icon={<img src="/resources.svg" alt="resources" />} title="Resources">
-                  <Menu.Item>
-                    <a href="https://docs.illumidesk.com" rel="noopener noreferrer" target="_blank">
-                      <FontAwesomeIcon icon={faExternalLinkAlt} />
-                      <span>Documentation</span>
-                    </a>
-                  </Menu.Item>
-                </Menu.SubMenu>
-              </Menu>
-
-              <Menu
-                className="meun-bottom"
+            <>
+              <div
+                className="drawer-backdrop"
+                style={{ display: !this.state.collapsed ? 'block' : '' }}
+              ></div>
+              <Sider
                 theme="light"
-                mode="inline"
-                selectedKeys={this.getDefaultSelected()}
+                collapsible
+                collapsed={this.state.collapsed}
+                onCollapse={this.onCollapse}
+                className="sidebar"
+                width="256"
+                breakpoint="md"
+                collapsedWidth="0px"
               >
-                {currentOrganization.ownerId !== currentUser._id ? (
-                  ''
-                ) : (
-                  <Menu.Item key="5">
-                    <Button
-                      icon={<img src="/invite-member-icon.svg" alt="invite member" />}
-                      onClick={() => {
-                        window.innerWidth <= 1024
-                          ? this.setState({ open: true, collapsed: true })
-                          : this.setState({ open: true });
-                      }}
-                      type="link"
-                    >
-                      Invite Member
-                    </Button>
-                  </Menu.Item>
-                )}
+                <div className="logo for-mobile-toggle">
+                  {this.renderHeaderLogo()}
 
-                {currentOrganization.ownerId !== currentUser._id ? (
-                  ''
-                ) : (
-                  <Menu.Item key="3">
-                    <Link href="/organization-settings">
-                      <Button icon={<img src="/Setting-icon.svg" alt="settings" />} type="link">
-                        Settings
+                  <div>
+                    {React.createElement(
+                      this.state.collapsed ? MenuUnfoldOutlined : MenuFoldOutlined,
+                      {
+                        className: 'trigger trigger-for-mobile',
+                        onClick: this.toggle,
+                      },
+                    )}
+                  </div>
+                </div>
+                <Menu theme="light" mode="inline" selectedKeys={this.getDefaultSelected()}>
+                  <Menu.Item className="profile-dropdown-link" data-key="1">
+                    <Dropdown overlay={organizationMenu} trigger={['click']}>
+                      <a
+                        className="ant-dropdown-link d-flex-profile"
+                        onClick={(e) => e.preventDefault()}
+                      >
+                        <div className="d-flex-profile">
+                          <div className="user-badge">{currentOrganization.name.charAt(0)}</div>
+                          <div>
+                            <h5>{currentOrganization.name}</h5>
+                          </div>
+                        </div>
+
+                        <img src="/porfile-open.svg" alt="dropdown" />
+                      </a>
+                    </Dropdown>
+                  </Menu.Item>
+                  <Menu.Divider />
+                  <Menu.Item key="1">
+                    <Link href={`/${currentOrganization.slug}/${Pluralize(COMMON_ENTITY)}`}>
+                      <Button icon={<img src="/stacks.svg" alt="stacks" />} type="link">
+                        {capitalize(Pluralize(COMMON_ENTITY))}
                       </Button>
                     </Link>
                   </Menu.Item>
-                )}
-              </Menu>
-            </Sider>
+
+                  <Menu.Item key="2">
+                    <Link href={`/${currentOrganization.slug}/team`}>
+                      <Button icon={<img src="/Teams.svg" alt="stacks" />} type="link">
+                        Teams
+                      </Button>
+                    </Link>
+                  </Menu.Item>
+                  <Menu.SubMenu
+                    icon={<img src="/resources.svg" alt="resources" />}
+                    title="Resources"
+                  >
+                    <Menu.Item>
+                      <a
+                        href="https://docs.illumidesk.com"
+                        rel="noopener noreferrer"
+                        target="_blank"
+                      >
+                        <FontAwesomeIcon icon={faExternalLinkAlt} />
+                        <span>Documentation</span>
+                      </a>
+                    </Menu.Item>
+                  </Menu.SubMenu>
+                </Menu>
+
+                <Menu
+                  className="meun-bottom"
+                  theme="light"
+                  mode="inline"
+                  selectedKeys={this.getDefaultSelected()}
+                >
+                  {currentOrganization.ownerId !== currentUser._id ? (
+                    ''
+                  ) : (
+                    <Menu.Item key="5">
+                      <Button
+                        icon={<img src="/invite-member-icon.svg" alt="invite member" />}
+                        onClick={() => {
+                          window.innerWidth <= 1024
+                            ? this.setState({ open: true, collapsed: true })
+                            : this.setState({ open: true });
+                        }}
+                        type="link"
+                      >
+                        Invite Member
+                      </Button>
+                    </Menu.Item>
+                  )}
+
+                  {currentOrganization.ownerId !== currentUser._id ? (
+                    ''
+                  ) : (
+                    <Menu.Item key="3">
+                      <Link href="/organization-settings">
+                        <Button icon={<img src="/Setting-icon.svg" alt="settings" />} type="link">
+                          Settings
+                        </Button>
+                      </Link>
+                    </Menu.Item>
+                  )}
+                </Menu>
+              </Sider>
+            </>
           )}
         <Layout className="site-layout">
           <Header className="site-layout-background">
