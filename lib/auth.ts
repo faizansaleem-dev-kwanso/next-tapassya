@@ -91,10 +91,18 @@ export async function validateReqAndFetchData(
     }
 
     if (!user.firstName && nameNotSetPath && !dontRedirect) {
-      return redirectTo(res, nameNotSetPath, data);
+      if (!user.isActive) {
+        return redirectTo(res, 'account-deactivated', data);
+      } else {
+        return redirectTo(res, nameNotSetPath, data);
+      }
     }
-    if (!organizations && !dontRedirect) {
-      return redirectTo(res, nameNotSetPath, data);
+    if (organizations.organizations.length <= 0 && !dontRedirect) {
+      if (!user.isActive) {
+        return redirectTo(res, 'account-deactivated', data);
+      } else {
+        return redirectTo(res, nameNotSetPath, data);
+      }
     }
   } else if (notLoggedInPath) {
     return redirectTo(res, notLoggedInPath, data);
@@ -105,14 +113,21 @@ export async function validateReqAndFetchData(
   }
 
   if ((logoutRequired || !dontRedirect) && user) {
-    const { organizations = [] } = await getOrganization({ request: req });
-
     const selectedOrganization =
-      organizations && organizations.find((organization) => organization.ownerId === user._id);
+      organizations &&
+      organizations.organizations.find((organization) => organization.ownerId === user._id);
 
     if (!selectedOrganization) {
       if (!dontRedirect) {
-        return redirectTo(res, nameNotSetPath, data);
+        if (!user.isActive) {
+          return redirectTo(res, 'account-deactivated', data);
+        } else {
+          return redirectTo(
+            res,
+            `/${organizations.organizations[0].slug}/${Pluralize(COMMON_ENTITY)}`,
+            data,
+          );
+        }
       } else {
         return [data, false];
       }

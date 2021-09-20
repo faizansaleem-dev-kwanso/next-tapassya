@@ -24,7 +24,7 @@ const OrganizationModal: FC<OrganizationModalProps> = (props): JSX.Element => {
   const { addOrganization } = props.store.organizationStore;
   const [form] = Form.useForm();
   const { edit, open, store, router, onCollapse } = props;
-  const { currentOrganization, organizationStore } = store;
+  const { currentOrganization, organizationStore, organizations, currentUser } = store;
   const { editOrganization } = organizationStore;
 
   //Here we reset form values whenever a modal is opened or closed
@@ -73,7 +73,12 @@ const OrganizationModal: FC<OrganizationModalProps> = (props): JSX.Element => {
 
   //This opens and closes modal
   const handleClick = (): void => {
-    setIsModalVisible(!isModalVisible);
+    const organization = organizations.find((org) => org.ownerId === currentUser._id);
+    if (organization) {
+      setIsModalVisible(!isModalVisible);
+    } else {
+      router.push('/user-info');
+    }
   };
 
   return (

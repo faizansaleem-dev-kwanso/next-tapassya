@@ -1,5 +1,6 @@
+/* eslint-disable react/prop-types */
 import { Button } from 'antd';
-import * as React from 'react';
+import React, { FC } from 'react';
 import Head from 'next/head';
 import { inject, observer } from 'mobx-react';
 import { withAuth } from '../lib/auth';
@@ -9,24 +10,33 @@ import '../styles/Stacks.module.less';
 import '../styles/Layout.module.less';
 import OnboardingHeader from 'components/common/OnboardingHeader';
 import { GetServerSideProps } from 'next';
+import { EmailVerifyProps } from 'interfaces';
+import router from 'next/router';
+import { COMMON_ENTITY } from 'lib/consts';
+import Pluralize from 'pluralize';
 
-const continueToDashboard = async () => {
-  const res = await checkEmailVerification();
-  if (res.message) {
-    notify(res.message, 'info', true);
-  } else if (res.redirectTo) {
-    if (res.success) {
-      notify('Success. Redirecting to dashboard...', 'success', true);
+const EmailVerify: FC<EmailVerifyProps> = (props): JSX.Element => {
+  const { store } = props;
+  const { organizations } = store;
+  const continueToDashboard = async () => {
+    const res = await checkEmailVerification();
+    if (res.message) {
+      notify(res.message, 'info', true);
+    } else if (res.redirectTo) {
+      if (res.success) {
+        notify('Success. Redirecting to dashboard...', 'success', true);
+      } else {
+        notify('Redirecting to login...', 'info', true);
+      }
+      if (organizations.length === 0) {
+        window.location.replace(res.redirectTo);
+      } else {
+        router.push(`/${organizations[0].slug}/${Pluralize(COMMON_ENTITY)}`);
+      }
     } else {
-      notify('Redirecting to login...', 'info', true);
+      notify('Unable to find your verification status', 'info', true);
     }
-    window.location.replace(res.redirectTo);
-  } else {
-    notify('Unable to find your verification status', 'info', true);
-  }
-};
-
-const EmailVerify = (props): JSX.Element => {
+  };
   return (
     <OnboardingHeader {...props}>
       <Head>

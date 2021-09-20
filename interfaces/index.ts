@@ -34,6 +34,11 @@ export interface InitialStateInterface {
   selectedTeam: TeamResponse;
 }
 
+export interface EmailVerifyProps {
+  store?: Store;
+  initialState: InitialStateInterface;
+}
+
 export interface StackModalInterface {
   title: string;
   subTitle: string;

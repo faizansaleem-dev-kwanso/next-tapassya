@@ -359,8 +359,9 @@ class StacksID extends React.Component<StackIdProps, StackIdState> {
     const organization = currentOrganization;
     const { stack, errors } = this.state;
     const { actions } = stack;
-    const { text, unProvisionedAction, className, classNameDot, comment } =
-      getStatusAndComment(actions);
+    const { text, unProvisionedAction, className, classNameDot, comment } = getStatusAndComment(
+      actions,
+    );
 
     const disableButtons = this.state.disabled || unProvisionedAction !== null;
 
@@ -642,6 +643,6 @@ class StacksID extends React.Component<StackIdProps, StackIdState> {
   }
 }
 
-export const getServerSideProps = withAuth(null, {});
+export const getServerSideProps = withAuth(null, { dontRedirect: true });
 
 export default withRouter<StackIdProps>(inject('store', 'stackStore')(observer(StacksID)));
