@@ -359,9 +359,8 @@ class StacksID extends React.Component<StackIdProps, StackIdState> {
     const organization = currentOrganization;
     const { stack, errors } = this.state;
     const { actions } = stack;
-    const { text, unProvisionedAction, className, classNameDot, comment } = getStatusAndComment(
-      actions,
-    );
+    const { text, unProvisionedAction, className, classNameDot, comment } =
+      getStatusAndComment(actions);
 
     const disableButtons = this.state.disabled || unProvisionedAction !== null;
 

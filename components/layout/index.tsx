@@ -71,7 +71,7 @@ class LayoutComponent extends React.Component<LayoutProps> {
         ? this.setState({ paymentFail: false })
         : this.setState({ paymentFail: true });
     }
-    (function(w, d, i) {
+    (function (w, d, i) {
       function l() {
         if (!d.getElementById(i)) {
           const f = d.getElementsByTagName('script')[0],
@@ -83,7 +83,7 @@ class LayoutComponent extends React.Component<LayoutProps> {
         }
       }
       if ('function' != typeof w.Canny) {
-        const c = function() {
+        const c = function () {
           // eslint-disable-next-line
           c.q.push(arguments);
         } as any;
